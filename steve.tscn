@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://bbi8sjqaqcjaq"]
+
+[ext_resource type="Script" uid="uid://cyv1gn3e1yabn" path="res://steve.gd" id="1_bh3ft"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bh3ft"]
+albedo_color = Color(0.4645, 1, 0.37, 1)
+roughness = 0.25
+
+[sub_resource type="BoxMesh" id="BoxMesh_hdy3p"]
+material = SubResource("StandardMaterial3D_bh3ft")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bh3ft"]
+
+[node name="Steve" type="CharacterBody3D"]
+script = ExtResource("1_bh3ft")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_hdy3p")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_bh3ft")
