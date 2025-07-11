@@ -48,6 +48,7 @@ func turn_around():
 
 
 func _on_sides_checker_body_entered(body: Node3D) -> void:
+	SoundManager.play_enemy_sound()
 	get_tree().change_scene_to_file("res://game_over.tscn")
 
 
@@ -58,6 +59,7 @@ func _on_top_checker_body_entered(body: Node3D) -> void:
 	$TopChecker.set_collision_mask_value(1, false)
 	direction = Vector3.ZERO
 	speed = 0
+	$SoundSquash.play()
 	
 	await get_tree().create_timer(0.3).timeout
 	queue_free()

@@ -1,16 +1,8 @@
-[gd_scene load_steps=23 format=4 uid="uid://bbi8sjqaqcjaq"]
+[gd_scene load_steps=21 format=4 uid="uid://bbi8sjqaqcjaq"]
 
 [ext_resource type="Script" uid="uid://cyv1gn3e1yabn" path="res://steve.gd" id="1_bh3ft"]
 [ext_resource type="Texture2D" uid="uid://bwh3lbt3ps853" path="res://assets/models/robot_robot_mix_decals.png" id="2_8vtpt"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bh3ft"]
-albedo_color = Color(0.4645, 1, 0.37, 1)
-roughness = 0.25
-
-[sub_resource type="BoxMesh" id="BoxMesh_hdy3p"]
-material = SubResource("StandardMaterial3D_bh3ft")
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_bh3ft"]
+[ext_resource type="AudioStream" uid="uid://tru78gd6y1ly" path="res://assets/sound-effects/jump-jump4.ogg" id="3_2sxuh"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8vtpt"]
 radius = 0.305
@@ -818,14 +810,6 @@ _data = {
 collision_mask = 22
 script = ExtResource("1_bh3ft")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-visible = false
-mesh = SubResource("BoxMesh_hdy3p")
-
-[node name="Face" type="MeshInstance3D" parent="MeshInstance3D"]
-transform = Transform3D(0.620744, 0, 0, 0, 0, 0.620744, 0, -0.38405, 0, 0, 0.32373, -0.156738)
-mesh = SubResource("CylinderMesh_bh3ft")
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.145, 0)
 shape = SubResource("CapsuleShape3D_8vtpt")
@@ -927,3 +911,7 @@ skin = SubResource("Skin_b44al")
 libraries = {
 &"": SubResource("AnimationLibrary_e0f71")
 }
+
+[node name="SoundJump" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_2sxuh")
+volume_db = -13.84
