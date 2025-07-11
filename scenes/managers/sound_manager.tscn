@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://ul1w4gg7kpwi"]
 
 [ext_resource type="AudioStream" uid="uid://lagliydwmweo" path="res://assets/sound-effects/enemy-lose4.ogg" id="1_g5net"]
-[ext_resource type="Script" uid="uid://c553mv3sh1ivo" path="res://sound_manager.gd" id="1_mdjn0"]
+[ext_resource type="Script" uid="uid://c553mv3sh1ivo" path="res://scenes/managers/sound_manager.gd" id="1_mdjn0"]
 [ext_resource type="AudioStream" uid="uid://wej4yuo1owaf" path="res://assets/sound-effects/coin-coin3.ogg" id="3_22ksp"]
 [ext_resource type="AudioStream" uid="uid://bqe613eej6q85" path="res://assets/sound-effects/button-maximize_007.ogg" id="4_h8btt"]
 [ext_resource type="AudioStream" uid="uid://dx552di7urbv2" path="res://assets/sound-effects/fall-gameover2.ogg" id="5_7jwsb"]

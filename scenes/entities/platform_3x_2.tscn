@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=4 uid="uid://bplkmq4is1e3q"]
 
 [ext_resource type="Texture2D" uid="uid://bseeo6vm5v2y" path="res://assets/models/world-blocks-v1_Tiles118_1K-JPG_Roughness.png" id="1_lqv1g"]
-[ext_resource type="Script" uid="uid://be6w8xitjxqud" path="res://platform_3x_2.gd" id="1_qdckh"]
+[ext_resource type="Script" uid="uid://be6w8xitjxqud" path="res://scenes/entities/platform_3x_2.gd" id="1_qdckh"]
 [ext_resource type="Texture2D" uid="uid://cnl68hay7o7vx" path="res://assets/models/world-blocks-v1_Tiles118_1K-JPG_NormalGL.jpg" id="2_qdckh"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pwsma"]

@@ -1,21 +1,23 @@
-[gd_scene load_steps=5 format=3 uid="uid://ta78h3vmnig4"]
+[gd_scene load_steps=6 format=3 uid="uid://bfdmmf55c6p11"]
 
-[ext_resource type="Script" uid="uid://bsk18omc62ml5" path="res://win_screen.gd" id="1_l5t5q"]
-[ext_resource type="Texture2D" uid="uid://b1lkf6rvsv7ct" path="res://assets/images/image-screen-win.png" id="2_l5t5q"]
-[ext_resource type="FontFile" uid="uid://dkodl0xwscp2n" path="res://assets/fonts/FrancoisOne-Regular.ttf" id="3_26557"]
+[ext_resource type="Script" uid="uid://qlpdi6teustb" path="res://scenes/menus/menu_title.gd" id="1_5cs7u"]
+[ext_resource type="Texture2D" uid="uid://c2o43odp2tqw6" path="res://assets/images/image-screen-title.png" id="1_n3opb"]
+[ext_resource type="FontFile" uid="uid://dkodl0xwscp2n" path="res://assets/fonts/FrancoisOne-Regular.ttf" id="2_5cs7u"]
+[ext_resource type="PackedScene" uid="uid://cv8tn2x2rv3w7" path="res://scenes/menus/empty.tscn" id="2_weaej"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n3opb"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 border_color = Color(0, 0, 0, 0)
 
-[node name="WinScreen" type="Control"]
+[node name="MenuTitle" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_l5t5q")
+script = ExtResource("1_5cs7u")
+level_1 = ExtResource("2_weaej")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 0
@@ -26,45 +28,43 @@ offset_bottom = 674.0
 color = Color(0.181893, 0.1216, 0.38, 1)
 
 [node name="TextureRect" type="TextureRect" parent="."]
-z_index = 3
 layout_mode = 0
-offset_left = -181.0
-offset_top = -261.0
-offset_right = -141.0
-offset_bottom = -221.0
-scale = Vector2(41.1587, 24.6579)
-texture = ExtResource("2_l5t5q")
+offset_left = -18.0
+offset_top = 40.0
+offset_right = 22.0
+offset_bottom = 80.0
+scale = Vector2(26.3949, 15.813)
+texture = ExtResource("1_n3opb")
 expand_mode = 1
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_left = 27.0
-offset_top = 144.0
-offset_right = 999.0
-offset_bottom = 508.0
-rotation = -0.22938
+offset_left = 429.0
+offset_top = 47.0
+offset_right = 1104.0
+offset_bottom = 148.0
+rotation = 0.0872564
 theme_override_colors/font_color = Color(0.8, 0.208, 0.7408, 1)
 theme_override_colors/font_shadow_color = Color(0.718667, 0.77, 0.154, 1)
 theme_override_constants/shadow_offset_x = 5
 theme_override_constants/shadow_offset_y = 5
-theme_override_fonts/font = ExtResource("3_26557")
-theme_override_font_sizes/font_size = 256
-text = "YOU WIN!"
+theme_override_fonts/font = ExtResource("2_5cs7u")
+theme_override_font_sizes/font_size = 70
+text = "3D PLATFORMER GAME!"
 
 [node name="Button" type="Button" parent="."]
-z_index = 4
 layout_mode = 0
-offset_left = 774.0
-offset_top = 380.0
-offset_right = 1099.0
-offset_bottom = 489.0
+offset_left = 684.0
+offset_top = 311.0
+offset_right = 995.0
+offset_bottom = 420.0
 theme_override_colors/font_hover_color = Color(0.17595, 0.46, 0.161, 1)
 theme_override_colors/font_color = Color(0.2754, 0.72, 0.252, 1)
 theme_override_colors/font_pressed_color = Color(0.11475, 0.3, 0.105, 1)
-theme_override_fonts/font = ExtResource("3_26557")
+theme_override_fonts/font = ExtResource("2_5cs7u")
 theme_override_font_sizes/font_size = 64
 theme_override_styles/focus = SubResource("StyleBoxFlat_n3opb")
-text = "MAIN MENU"
+text = "PLAY"
 flat = true
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

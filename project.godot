@@ -13,12 +13,12 @@ config_version=5
 config/name="3D Platformer Game"
 run/main_scene="uid://bfdmmf55c6p11"
 config/features=PackedStringArray("4.4", "Forward Plus")
-config/icon="res://icon.svg"
 
 [autoload]
 
-Global="*res://global.gd"
-SoundManager="*res://sound_manager.tscn"
+Global="*res://scenes/managers/global.gd"
+SoundManager="*res://scenes/managers/sound_manager.tscn"
+LevelManager="*res://scenes/managers/level_manager.gd"
 
 [input]
 

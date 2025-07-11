@@ -7,6 +7,7 @@ const JUMP_VELOCITY = 12
 var xform : Transform3D
 
 func _physics_process(delta: float) -> void:
+	
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
@@ -27,7 +28,7 @@ func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-
+	
 	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
@@ -47,7 +48,6 @@ func _physics_process(delta: float) -> void:
 	elif not is_on_floor():
 		align_with_floor(Vector3.UP)
 		global_transform = global_transform.interpolate_with(xform, 0.3)
-		
 	
 	# Update the velocity and move the character
 	if direction:
@@ -56,9 +56,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
-
+	
 	move_and_slide()
-
+	
 	# Make Camera Controller Match the position of myself
 	$Camera_Controller.position = lerp($Camera_Controller.position, position, 0.15)
 
@@ -70,7 +70,7 @@ func align_with_floor(floor_normal):
 
 func _on_fall_zone_body_entered(body: Node3D) -> void:
 	SoundManager.play_fall_sound()
-	get_tree().change_scene_to_file("res://game_over.tscn")
-	
+	LevelManager.change_to_game_over()
+
 func bounce():
 	velocity.y = JUMP_VELOCITY

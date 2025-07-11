@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=4 uid="uid://by3jpwy37l2ob"]
+[gd_scene load_steps=16 format=4 uid="uid://by3jpwy37l2ob"]
 
-[ext_resource type="Script" uid="uid://cv1hwh5qc7loo" path="res://enemy.gd" id="1_7k104"]
+[ext_resource type="Script" uid="uid://cv1hwh5qc7loo" path="res://scenes/enemies/enemy.gd" id="1_7k104"]
 [ext_resource type="AudioStream" uid="uid://xwocixympq1g" path="res://assets/sound-effects/squash-jump2.ogg" id="2_4gyqm"]
+[ext_resource type="PackedScene" uid="uid://dewfv4e05bq7m" path="res://scenes/menus/game_over.tscn" id="2_qi2p4"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w0x6m"]
 resource_name = "Material"
@@ -181,6 +182,7 @@ radius = 0.294434
 collision_layer = 8
 collision_mask = 10
 script = ExtResource("1_7k104")
+gameOverScene = ExtResource("2_qi2p4")
 
 [node name="Armature" type="Node3D" parent="."]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, -0.308083, 0)

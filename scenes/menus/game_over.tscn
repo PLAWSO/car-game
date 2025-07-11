@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dewfv4e05bq7m"]
+[gd_scene load_steps=6 format=3 uid="uid://dewfv4e05bq7m"]
 
-[ext_resource type="Script" uid="uid://cnn0vtoxov2tb" path="res://game_over.gd" id="1_ccer4"]
+[ext_resource type="Script" uid="uid://cnn0vtoxov2tb" path="res://scenes/menus/game_over.gd" id="1_ccer4"]
+[ext_resource type="PackedScene" uid="uid://cv8tn2x2rv3w7" path="res://scenes/menus/empty.tscn" id="2_8u835"]
 [ext_resource type="Texture2D" uid="uid://ch4abdspsbbwi" path="res://assets/images/image-screen-gameover.png" id="2_ccer4"]
 [ext_resource type="FontFile" uid="uid://dkodl0xwscp2n" path="res://assets/fonts/FrancoisOne-Regular.ttf" id="3_ftari"]
 
@@ -16,6 +17,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ccer4")
+level_1 = ExtResource("2_8u835")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 0
