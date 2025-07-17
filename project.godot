@@ -20,6 +20,13 @@ Global="*res://scenes/managers/global.gd"
 SoundManager="*res://scenes/managers/sound_manager.tscn"
 LevelManager="*res://scenes/managers/level_manager.gd"
 
+[display]
+
+window/size/viewport_width=640
+window/size/viewport_height=360
+window/size/mode=4
+window/stretch/mode="viewport"
+
 [input]
 
 cam_left={

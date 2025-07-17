@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://dewfv4e05bq7m"]
+[gd_scene load_steps=5 format=3 uid="uid://dewfv4e05bq7m"]
 
 [ext_resource type="Script" uid="uid://cnn0vtoxov2tb" path="res://scenes/menus/game_over.gd" id="1_ccer4"]
-[ext_resource type="PackedScene" uid="uid://cv8tn2x2rv3w7" path="res://scenes/menus/empty.tscn" id="2_8u835"]
 [ext_resource type="Texture2D" uid="uid://ch4abdspsbbwi" path="res://assets/images/image-screen-gameover.png" id="2_ccer4"]
 [ext_resource type="FontFile" uid="uid://dkodl0xwscp2n" path="res://assets/fonts/FrancoisOne-Regular.ttf" id="3_ftari"]
 
@@ -16,8 +15,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.997609, 1)
 script = ExtResource("1_ccer4")
-level_1 = ExtResource("2_8u835")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 0
@@ -25,6 +24,7 @@ offset_left = -14.0
 offset_top = -16.0
 offset_right = 1170.0
 offset_bottom = 674.0
+scale = Vector2(0.559918, 0.559918)
 color = Color(0.181893, 0.1216, 0.38, 1)
 
 [node name="TextureRect" type="TextureRect" parent="."]
@@ -33,17 +33,18 @@ offset_left = -60.0
 offset_top = 32.0
 offset_right = -20.0
 offset_bottom = 72.0
-scale = Vector2(23.0508, 13.8096)
+scale = Vector2(12.9065, 7.73224)
 texture = ExtResource("2_ccer4")
 expand_mode = 1
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_left = 556.0
-offset_top = 60.0
-offset_right = 1231.0
-offset_bottom = 161.0
+offset_left = 227.544
+offset_top = 24.0
+offset_right = 902.544
+offset_bottom = 125.0
 rotation = 0.0872564
+scale = Vector2(0.559918, 0.559918)
 theme_override_colors/font_color = Color(0.8, 0.208, 0.7408, 1)
 theme_override_colors/font_shadow_color = Color(0.718667, 0.77, 0.154, 1)
 theme_override_constants/shadow_offset_x = 5
@@ -54,10 +55,11 @@ text = "GAME OVER"
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0
-offset_left = 684.0
-offset_top = 311.0
-offset_right = 995.0
-offset_bottom = 420.0
+offset_left = 409.98
+offset_top = 190.0
+offset_right = 720.98
+offset_bottom = 299.0
+scale = Vector2(0.559918, 0.559918)
 theme_override_colors/font_hover_color = Color(0.17595, 0.46, 0.161, 1)
 theme_override_colors/font_color = Color(0.2754, 0.72, 0.252, 1)
 theme_override_colors/font_pressed_color = Color(0.11475, 0.3, 0.105, 1)

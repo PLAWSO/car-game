@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://qakinsfk3l48"]
+
+[ext_resource type="Shader" uid="uid://xv84tfq0fasy" path="res://shaders/cel_shading.gdshader" id="1_7ww5h"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7js4i"]
+shader = ExtResource("1_7ww5h")
+shader_parameter/threshold = 0.5
+shader_parameter/steps = 10
+
+[node name="CelShading" type="Node3D"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = 10
+material = SubResource("ShaderMaterial_7js4i")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

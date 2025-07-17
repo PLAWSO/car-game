@@ -3,8 +3,10 @@ extends CharacterBody3D
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 12
+const COYOTE_FRAMES := 5
 
 var xform : Transform3D
+var frames_off_floor := 0
 
 func _physics_process(delta: float) -> void:
 	
@@ -28,11 +30,15 @@ func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+		frames_off_floor += 1
+	else:
+		frames_off_floor = 0
 	
 	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	if Input.is_action_just_pressed("ui_accept") and (is_on_floor() or frames_off_floor < COYOTE_FRAMES):
 		velocity.y = JUMP_VELOCITY
 		$SoundJump.play()
+		frames_off_floor = COYOTE_FRAMES
 	
 	# New Vector3 direction, taking into account the user arrow inputs and the camera rotation
 	var direction = ($Camera_Controller.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
