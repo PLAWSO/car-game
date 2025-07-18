@@ -1,0 +1,61 @@
+[gd_scene load_steps=9 format=3 uid="uid://c1xrcmt5kfank"]
+
+[ext_resource type="PackedScene" uid="uid://b7ibahhonm1hm" path="res://scenes/menus/hud/hud.tscn" id="1_8qukl"]
+[ext_resource type="PackedScene" uid="uid://cyjgat22ocab6" path="res://scenes/player/car.tscn" id="2_3p04p"]
+[ext_resource type="Texture2D" uid="uid://cqcfr8bmt3rhw" path="res://assets/textures/checkerboard.png" id="4_fiq81"]
+[ext_resource type="Environment" uid="uid://b4vvsymm23i35" path="res://resources/level_1_environment.tres" id="7_r88tb"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ndlae"]
+size = Vector3(5000, 20, 5000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ra442"]
+size = Vector3(100, 1, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fiq81"]
+albedo_color = Color(0.709104, 0.839077, 0.914673, 0.145098)
+albedo_texture = ExtResource("4_fiq81")
+
+[sub_resource type="BoxMesh" id="BoxMesh_l37oo"]
+material = SubResource("StandardMaterial3D_fiq81")
+size = Vector3(100, 1, 100)
+
+[node name="Level2" type="Node3D"]
+
+[node name="Player" type="Node3D" parent="."]
+
+[node name="HUD" parent="Player" instance=ExtResource("1_8qukl")]
+
+[node name="Car" parent="Player" instance=ExtResource("2_3p04p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3682, 4.47642, 2.71216)
+
+[node name="Enemies" type="Node3D" parent="."]
+
+[node name="FallZone" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11.3914, 0)
+collision_layer = 16
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FallZone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.19948, -12.3286, -1.65496)
+shape = SubResource("BoxShape3D_ndlae")
+
+[node name="Entities" type="Node3D" parent="."]
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(0.544007, -0.536549, 0.645113, 0.251703, 0.837777, 0.484536, -0.800438, -0.101214, 0.590808, 10.0804, 25.4312, 20.8462)
+light_energy = 1.595
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = ExtResource("7_r88tb")
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+collision_layer = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_ra442")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("BoxMesh_l37oo")

@@ -110,6 +110,5 @@ data = {
 metadata/_editor_floor_ = Vector3(0, -1, 0)
 
 [node name="CelShading" parent="." instance=ExtResource("10_qxy0u")]
-visible = false
 
 [connection signal="body_entered" from="FallZone" to="Player/Steve" method="_on_fall_zone_body_entered"]

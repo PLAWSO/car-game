@@ -2,3 +2,5 @@
 .godot/
 /android/
 assets/
+addons/
+examples_dd3d
