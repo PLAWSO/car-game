@@ -1,10 +1,14 @@
-[gd_scene load_steps=13 format=4 uid="uid://cyjgat22ocab6"]
+[gd_scene load_steps=17 format=4 uid="uid://cyjgat22ocab6"]
 
 [ext_resource type="Script" uid="uid://cgj5e1vp0habr" path="res://scenes/player/car.gd" id="1_4vl2h"]
 [ext_resource type="Texture2D" uid="uid://dg4k33db8mnwp" path="res://assets/models/general-lee/general-lee_Car Texture 1.png" id="1_janxj"]
 [ext_resource type="Texture2D" uid="uid://c11g33j2yye57" path="res://assets/models/general-lee/tire_Car Texture 1.png" id="3_f5x6r"]
 [ext_resource type="Script" uid="uid://ccvete4ci42r" path="res://scenes/player/raycast_wheel.gd" id="4_cr842"]
 [ext_resource type="Script" uid="uid://b5mdrjubj0lg5" path="res://examples_dd3d/demo_camera_movement.gd" id="4_f5x6r"]
+
+[sub_resource type="Curve" id="Curve_cr842"]
+_data = [Vector2(0, 0.31338), 0.0, 0.0, 0, 0, Vector2(0.288533, 0.934199), 0.0, 0.0, 0, 0, Vector2(0.577065, 0.745378), 0.0, 0.0, 0, 0, Vector2(1, 0.084507), 0.0, 0.0, 0, 0]
+point_count = 4
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_db5j1"]
 size = Vector3(1.885, 1.085, 3.9)
@@ -91,12 +95,24 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_opsp5")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cr842"]
+albedo_color = Color(0, 1, 0.216667, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lr2ax"]
+material = SubResource("StandardMaterial3D_cr842")
+size = Vector3(0.25, 0.5, 0.01)
+
+[sub_resource type="Curve" id="Curve_lr2ax"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.499168, 0.782278), 0.0, 0.0, 0, 0, Vector2(1, 0.101401), 0.0, 0.0, 0, 0]
+point_count = 3
+
 [node name="Car" type="RigidBody3D" node_paths=PackedStringArray("wheels")]
 collision_mask = 22
 mass = 50.0
 center_of_mass_mode = 1
 script = ExtResource("1_4vl2h")
 wheels = [NodePath("DF_Wheel/RayCast3D"), NodePath("DR_Wheel/RayCast3D"), NodePath("PR_Wheel/RayCast3D"), NodePath("PF_Wheel/RayCast3D")]
+accel_curve = SubResource("Curve_cr842")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.116, 0.105)
@@ -124,10 +140,19 @@ transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 
 mesh = SubResource("ArrayMesh_cr842")
 skeleton = NodePath("")
 
+[node name="rotation_indicator" type="MeshInstance3D" parent="DF_Wheel/mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111142, 0.00744265, 0)
+mesh = SubResource("BoxMesh_lr2ax")
+
 [node name="RayCast3D" type="RayCast3D" parent="DF_Wheel"]
+enabled = false
 target_position = Vector3(0, -0.5, 0)
 collision_mask = 2
 script = ExtResource("4_cr842")
+spring_strength = 4000
+spring_damping = 100
+rest_dist = 0.06
+grip_curve = SubResource("Curve_lr2ax")
 
 [node name="DR_Wheel" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.749, -0.319, 1.223)
@@ -137,11 +162,20 @@ transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 
 mesh = SubResource("ArrayMesh_cr842")
 skeleton = NodePath("")
 
+[node name="rotation_indicator" type="MeshInstance3D" parent="DR_Wheel/mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111142, 0.00744265, 0)
+mesh = SubResource("BoxMesh_lr2ax")
+
 [node name="RayCast3D" type="RayCast3D" parent="DR_Wheel"]
+enabled = false
 target_position = Vector3(0, -0.5, 0)
 collision_mask = 2
 script = ExtResource("4_cr842")
+spring_strength = 4000
+spring_damping = 100
+rest_dist = 0.06
 is_motor = true
+grip_curve = SubResource("Curve_lr2ax")
 
 [node name="PR_Wheel" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.749, -0.319, 1.223)
@@ -151,11 +185,20 @@ transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 
 mesh = SubResource("ArrayMesh_cr842")
 skeleton = NodePath("")
 
+[node name="rotation_indicator" type="MeshInstance3D" parent="PR_Wheel/mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111142, 0.00744265, 0)
+mesh = SubResource("BoxMesh_lr2ax")
+
 [node name="RayCast3D" type="RayCast3D" parent="PR_Wheel"]
+enabled = false
 target_position = Vector3(0, -0.5, 0)
 collision_mask = 2
 script = ExtResource("4_cr842")
+spring_strength = 4000
+spring_damping = 100
+rest_dist = 0.06
 is_motor = true
+grip_curve = SubResource("Curve_lr2ax")
 
 [node name="PF_Wheel" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.749, -0.319, -1.232)
@@ -165,10 +208,19 @@ transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 
 mesh = SubResource("ArrayMesh_cr842")
 skeleton = NodePath("")
 
+[node name="rotation_indicator" type="MeshInstance3D" parent="PF_Wheel/mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111142, 0.00744265, 0)
+mesh = SubResource("BoxMesh_lr2ax")
+
 [node name="RayCast3D" type="RayCast3D" parent="PF_Wheel"]
+enabled = false
 target_position = Vector3(0, -0.5, 0)
 collision_mask = 2
 script = ExtResource("4_cr842")
+spring_strength = 4000
+spring_damping = 100
+rest_dist = 0.06
+grip_curve = SubResource("Curve_lr2ax")
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.40258, -0.320976, 0.140139)

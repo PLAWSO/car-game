@@ -1,8 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://c1xrcmt5kfank"]
+[gd_scene load_steps=8 format=3 uid="uid://c1xrcmt5kfank"]
 
 [ext_resource type="PackedScene" uid="uid://b7ibahhonm1hm" path="res://scenes/menus/hud/hud.tscn" id="1_8qukl"]
 [ext_resource type="PackedScene" uid="uid://cyjgat22ocab6" path="res://scenes/player/car.tscn" id="2_3p04p"]
-[ext_resource type="Texture2D" uid="uid://cqcfr8bmt3rhw" path="res://assets/textures/checkerboard.png" id="4_fiq81"]
+[ext_resource type="Material" uid="uid://bs621xdpbotlv" path="res://assets/materials/checkerboard_big.tres" id="4_fiq81"]
 [ext_resource type="Environment" uid="uid://b4vvsymm23i35" path="res://resources/level_1_environment.tres" id="7_r88tb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ndlae"]
@@ -11,12 +11,8 @@ size = Vector3(5000, 20, 5000)
 [sub_resource type="BoxShape3D" id="BoxShape3D_ra442"]
 size = Vector3(100, 1, 100)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fiq81"]
-albedo_color = Color(0.709104, 0.839077, 0.914673, 0.145098)
-albedo_texture = ExtResource("4_fiq81")
-
 [sub_resource type="BoxMesh" id="BoxMesh_l37oo"]
-material = SubResource("StandardMaterial3D_fiq81")
+material = ExtResource("4_fiq81")
 size = Vector3(100, 1, 100)
 
 [node name="Level2" type="Node3D"]
@@ -59,3 +55,5 @@ shape = SubResource("BoxShape3D_ra442")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
 mesh = SubResource("BoxMesh_l37oo")
+
+[connection signal="body_entered" from="FallZone" to="Player/Car" method="_on_fall_zone_body_entered"]
