@@ -1,0 +1,115 @@
+[gd_scene load_steps=11 format=3 uid="uid://crwyg2qibovj8"]
+
+[ext_resource type="Material" uid="uid://bn0va6gayhe5n" path="res://assets/materials/my_face.tres" id="1_0ljxa"]
+[ext_resource type="PackedScene" uid="uid://dv7uos683cwty" path="res://scenes/player/car_2.tscn" id="2_44gv1"]
+[ext_resource type="Environment" uid="uid://cnwxwcaylpkgk" path="res://resources/level_2_environment.tres" id="3_0ljxa"]
+[ext_resource type="Material" uid="uid://cqtjexeus2km0" path="res://assets/materials/brick.tres" id="3_0qepi"]
+[ext_resource type="PackedScene" uid="uid://ciihg03abri1h" path="res://scenes/entities/street_light.tscn" id="4_fmg3e"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_44gv1"]
+size = Vector3(100, 5, 100)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0ljxa"]
+material = ExtResource("1_0ljxa")
+size = Vector3(100, 5, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0qepi"]
+size = Vector3(5000, 20, 5000)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fmg3e"]
+material = ExtResource("3_0qepi")
+size = Vector3(15, 9, 15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ftfob"]
+size = Vector3(15, 9, 15)
+
+[node name="Level3" type="Node3D"]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+collision_layer = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_44gv1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("BoxMesh_0ljxa")
+
+[node name="FallZone" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10, 0)
+collision_layer = 16
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FallZone"]
+shape = SubResource("BoxShape3D_0qepi")
+
+[node name="Player" type="Node3D" parent="."]
+
+[node name="Car2" parent="Player" instance=ExtResource("2_44gv1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.98525, 9.05132, 0)
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="Buildings" type="Node3D" parent="Environment"]
+
+[node name="StaticBody3D1" type="StaticBody3D" parent="Environment/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.6188, 8.97115, -32.7622)
+collision_layer = 2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Buildings/StaticBody3D1"]
+mesh = SubResource("BoxMesh_fmg3e")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Buildings/StaticBody3D1"]
+shape = SubResource("BoxShape3D_ftfob")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="Environment/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.6188, 8.97115, -14.3068)
+collision_layer = 2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Buildings/StaticBody3D2"]
+mesh = SubResource("BoxMesh_fmg3e")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Buildings/StaticBody3D2"]
+shape = SubResource("BoxShape3D_ftfob")
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="Environment/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.6188, 8.97115, 12.8433)
+collision_layer = 2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Buildings/StaticBody3D3"]
+mesh = SubResource("BoxMesh_fmg3e")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Buildings/StaticBody3D3"]
+shape = SubResource("BoxShape3D_ftfob")
+
+[node name="StaticBody3D4" type="StaticBody3D" parent="Environment/Buildings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.6188, 8.97115, 39.5537)
+collision_layer = 2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/Buildings/StaticBody3D4"]
+mesh = SubResource("BoxMesh_fmg3e")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Buildings/StaticBody3D4"]
+shape = SubResource("BoxShape3D_ftfob")
+
+[node name="StreetLights" type="Node3D" parent="Environment"]
+
+[node name="StreetLight1" parent="Environment/StreetLights" instance=ExtResource("4_fmg3e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.86468, 11.6293, -38.5715)
+
+[node name="StreetLight2" parent="Environment/StreetLights" instance=ExtResource("4_fmg3e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.86468, 11.6293, -19.9583)
+
+[node name="StreetLight3" parent="Environment/StreetLights" instance=ExtResource("4_fmg3e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.86468, 11.6293, 6.33708)
+
+[node name="StreetLight4" parent="Environment/StreetLights" instance=ExtResource("4_fmg3e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.86468, 11.6293, 34.1274)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = ExtResource("3_0ljxa")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(-1, 0, -8.74228e-08, -6.18172e-08, 0.707107, 0.707107, 6.18172e-08, 0.707107, -0.707107, 0, 24.9098, -44.3973)
+light_energy = 0.01
+
+[connection signal="body_entered" from="FallZone" to="Player/Car2" method="_on_fall_zone_body_entered"]

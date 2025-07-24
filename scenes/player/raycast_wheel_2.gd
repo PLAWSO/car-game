@@ -29,6 +29,10 @@ class_name RayCastWheel2
 @onready var force_pos_timer: Timer = self.get_node("Timer")
 var last_force_pos
 
+var is_slipping := false
+
+var wheel_return_speed = 5.0
+
 func _ready() -> void:
 	ray.target_position.y = -(rest_dist + wheel_radius + over_extend)
 
@@ -39,6 +43,9 @@ func get_point_velocity(body: RigidBody3D, point: Vector3) -> Vector3:
 func do_wheel_process(body: Vehicle, delta: float):
 	do_wheel_steer(delta)
 	do_wheel_physics(body, delta)
+	
+	#Draw.vector(ray.global_position + Vector3(1, 0, 0), ray.target_position, Color.WEB_PURPLE)
+	#print(ray.global_position - ray.target_position)
 
 
 func do_wheel_steer(delta: float):
@@ -54,7 +61,7 @@ func do_wheel_steer(delta: float):
 
 func do_wheel_physics(body: Vehicle, delta: float):
 	ray.force_raycast_update()
-	ray.target_position.y = -(rest_dist + wheel_radius + over_extend)
+	#ray.target_position.y = -(rest_dist + wheel_radius + over_extend)
 	
 	var mass = body.mass
 	
@@ -63,7 +70,13 @@ func do_wheel_physics(body: Vehicle, delta: float):
 	var body_velocity := ray_forward.dot(body.linear_velocity)
 	mesh.rotate_x((-body_velocity * delta) / wheel_radius)
 	
-	if not ray.is_colliding(): return
+	if not ray.is_colliding():
+		#mesh.position.y = -(rest_dist - ray.target_position.y - wheel_radius - 0.18) # bigger number = higher
+		var rest_position = -(rest_dist - ray.target_position.y - wheel_radius - 0.18)
+		mesh.position.y = lerp(mesh.position.y, rest_position, 1.0 - exp(-wheel_return_speed * delta))
+		print("NOT COLLIDING")
+		return
+	print("PAUSE")
 	
 	var contact := ray.get_collision_point()
 	var spring_length := ray.global_position.distance_to(contact) - wheel_radius
@@ -94,28 +107,38 @@ func do_wheel_physics(body: Vehicle, delta: float):
 	var grip_ratio = absf(steering_velocity / tire_velocity.length())
 	var grip_factor := grip_curve.sample_baked(grip_ratio)
 	
-	if not body.hand_brake and grip_factor < 0.2:
-		body.is_slipping = false
+	#if not body.hand_brake and grip_factor < 0.2:
+		#self.is_slipping = false
+	#if body.hand_brake and not self.is_steer:
+		#grip_factor = 0.4
+		#self.is_slipping = true
+	#elif self.is_slipping and not self.is_steer:
+		#grip_factor = 0.4
+		#self.is_slipping = true
+	var z_grip_factor := z_traction
 	if body.hand_brake:
-		grip_factor = 0.01
-	elif body.is_slipping:
-		grip_factor = 0.1
+		grip_factor = 0
+		z_grip_factor = 0
 	
 	var gravity := -body.get_gravity().y
 	var x_force := -ray.global_basis.x * steering_velocity * grip_factor * ((body.mass * gravity)/ body.total_wheels)
 	
-	## drag
 	var forward_velocity := ray_forward.dot(tire_velocity)
-	var z_force := ray.global_basis.z * forward_velocity * z_traction * ((body.mass * gravity))
+	var z_force := ray.global_basis.z * forward_velocity * z_grip_factor * ((body.mass * gravity))
 	
 	body.apply_force(x_force, force_pos)
-	body.apply_force(y_force, force_pos)
-	body.apply_force(z_force, force_pos)
+	var apply_suspension_force: bool = body.linear_velocity.y > 0 or y_force.y > 0
+	if apply_suspension_force: body.apply_force(y_force, force_pos)
+	## drag
+	if is_motor and !body.motor_input:
+		body.apply_force(z_force, force_pos)
+	
 	
 	if self.show_debug:
+		Draw.vector(force_pos + body.global_position, ray.global_basis.x, Color.BLUE_VIOLET)
 		Draw.vector(force_pos + body.global_position, x_force / mass, Color.RED)
-		Draw.vector(force_pos + body.global_position, y_force / mass, Color.BLUE)
-		Draw.vector(force_pos + body.global_position, z_force / mass, Color.GREEN)
+		if apply_suspension_force: Draw.vector(force_pos + body.global_position, y_force / mass, Color.BLUE)
+		if is_motor and !body.motor_input: Draw.vector(force_pos + body.global_position, z_force / mass, Color.BLACK)
 	
 	last_force_pos = body.global_position
 

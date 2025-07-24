@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://c1xrcmt5kfank"]
+[gd_scene load_steps=15 format=3 uid="uid://c1xrcmt5kfank"]
 
 [ext_resource type="Script" uid="uid://c1cuqu17u5go8" path="res://scenes/levels/level_2.gd" id="1_fiq81"]
 [ext_resource type="PackedScene" uid="uid://dv7uos683cwty" path="res://scenes/player/car_2.tscn" id="1_ra442"]
-[ext_resource type="Material" uid="uid://bs621xdpbotlv" path="res://assets/materials/checkerboard_big.tres" id="4_fiq81"]
+[ext_resource type="Texture2D" uid="uid://dxrlqivfpy2k2" path="res://assets/textures/IMG_2459.JPG" id="4_l37oo"]
+[ext_resource type="Script" uid="uid://o5o1qmrlo1s3" path="res://scenes/levels/road_shape.gd" id="5_l37oo"]
 [ext_resource type="Environment" uid="uid://b4vvsymm23i35" path="res://resources/level_1_environment.tres" id="7_r88tb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ndlae"]
@@ -14,12 +15,31 @@ height = 6.0
 [sub_resource type="CylinderMesh" id="CylinderMesh_fiq81"]
 height = 6.0
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_l37oo"]
+size = Vector3(5, 0.25, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qpwj6"]
+size = Vector3(5, 0.25, 10)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_ra442"]
-size = Vector3(100, 1, 100)
+size = Vector3(100, 5, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l37oo"]
+albedo_texture = ExtResource("4_l37oo")
+uv1_scale = Vector3(2, 2, 2)
+uv1_offset = Vector3(0.335, 0, 0)
 
 [sub_resource type="BoxMesh" id="BoxMesh_l37oo"]
-material = ExtResource("4_fiq81")
-size = Vector3(100, 1, 100)
+material = SubResource("StandardMaterial3D_l37oo")
+size = Vector3(100, 5, 100)
+
+[sub_resource type="Curve3D" id="Curve3D_fiq81"]
+bake_interval = 50.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, 2, 0, 0, -0.744, 0, -52.803, -0.490389, 0, 1.93895, 0.490389, 0, -1.93895, -0.193439, -3.33786e-06, -91.2417, 0, 0, 0, 0, 0, 0, 1.34021, -3.33786e-06, -110.96, 0, 0, 0, 0, 0, 0, 2.65474, -3.33786e-06, -133.307, 0, 0, 0, 0, 0, 0, -0.376523, -3.33786e-06, -159.159, 0, 0, 0, 0, 0, 0, -35.3865, -3.33786e-06, -167.081, 0, 0, 0, 0, 0, 0, -78.574, -3.33786e-06, -145.615, 0, 0, 0, 0, 0, 0, -80.874, -3.33786e-06, -114.438, -1.60375, -1.17935, -0.192662, 1.60375, 1.17935, 0.192662, -56.3414, -3.33786e-06, -95.0162, 0, 0, 0, 0, 0, 0, -36.6643, 14.2206, -64.0949, -1.88614, 0.271732, 0.607145, 1.88614, -0.271732, -0.607145, -40.753, 14.4968, -54.6397),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 11
 
 [node name="Level2" type="Node3D"]
 script = ExtResource("1_fiq81")
@@ -27,7 +47,7 @@ script = ExtResource("1_fiq81")
 [node name="Player" type="Node3D" parent="."]
 
 [node name="Car2" parent="Player" instance=ExtResource("1_ra442")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.98525, 5.92428, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.98525, 16.4519, 0)
 
 [node name="Enemies" type="Node3D" parent="."]
 
@@ -52,7 +72,7 @@ shadow_enabled = true
 environment = ExtResource("7_r88tb")
 
 [node name="SpeedBump" type="StaticBody3D" parent="Environment"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.08641, 2.33029, -15.607)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.08641, 4.25829, -15.607)
 collision_layer = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/SpeedBump"]
@@ -62,7 +82,7 @@ shape = SubResource("CylinderShape3D_ra442")
 mesh = SubResource("CylinderMesh_fiq81")
 
 [node name="SpeedBump2" type="StaticBody3D" parent="Environment"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.08641, 2.33029, -13.9893)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.08641, 4.25829, -13.9893)
 collision_layer = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/SpeedBump2"]
@@ -72,7 +92,7 @@ shape = SubResource("CylinderShape3D_ra442")
 mesh = SubResource("CylinderMesh_fiq81")
 
 [node name="SpeedBump3" type="StaticBody3D" parent="Environment"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.08641, 2.33029, -12.3065)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.08641, 4.25829, -12.3065)
 collision_layer = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/SpeedBump3"]
@@ -82,7 +102,7 @@ shape = SubResource("CylinderShape3D_ra442")
 mesh = SubResource("CylinderMesh_fiq81")
 
 [node name="SpeedBump4" type="StaticBody3D" parent="Environment"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.08641, 2.33029, -10.6641)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.08641, 4.25829, -10.6641)
 collision_layer = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/SpeedBump4"]
@@ -92,7 +112,7 @@ shape = SubResource("CylinderShape3D_ra442")
 mesh = SubResource("CylinderMesh_fiq81")
 
 [node name="SpeedBump5" type="StaticBody3D" parent="Environment"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.08641, 2.33029, -8.66446)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.08641, 4.25829, -8.66446)
 collision_layer = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/SpeedBump5"]
@@ -100,6 +120,17 @@ shape = SubResource("CylinderShape3D_ra442")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/SpeedBump5"]
 mesh = SubResource("CylinderMesh_fiq81")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Environment"]
+transform = Transform3D(-4.2222e-08, -0.258819, 0.965926, -1.13133e-08, 0.965926, 0.258819, -1, 0, -4.37114e-08, -9.92869, 2.67516, 22.4716)
+collision_layer = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/StaticBody3D"]
+shape = SubResource("BoxShape3D_l37oo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/StaticBody3D"]
+transform = Transform3D(1, -1.77636e-15, -1.06581e-14, 0, 1, 0, 0, -3.88235e-23, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_qpwj6")
 
 [node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -110,5 +141,29 @@ shape = SubResource("BoxShape3D_ra442")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
 mesh = SubResource("BoxMesh_l37oo")
+
+[node name="Road" type="Node3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+
+[node name="RoadShape" type="Path3D" parent="Ground/Road"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.77491, 0.00268888, -0.653236)
+curve = SubResource("Curve3D_fiq81")
+script = ExtResource("5_l37oo")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Ground/Road"]
+use_collision = true
+collision_layer = 2
+polygon = PackedVector2Array(-10, 0, -10, 2, 10, 2, 10, 0)
+mode = 2
+path_node = NodePath("../RoadShape")
+path_interval_type = 0
+path_interval = 20.51
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
 
 [connection signal="body_entered" from="FallZone" to="Player/Car2" method="_on_fall_zone_body_entered"]

@@ -1,4 +1,4 @@
-[gd_resource type="Environment" load_steps=3 format=3 uid="uid://b4vvsymm23i35"]
+[gd_resource type="Environment" load_steps=3 format=3 uid="uid://cnwxwcaylpkgk"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hn12h"]
 
@@ -6,7 +6,8 @@
 sky_material = SubResource("ProceduralSkyMaterial_hn12h")
 
 [resource]
-background_mode = 2
+background_mode = 1
+background_color = Color(0.0126, 0.01318, 0.03, 1)
 sky = SubResource("Sky_ihfcg")
 ambient_light_source = 1
 ssr_enabled = true

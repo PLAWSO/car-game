@@ -1,17 +1,18 @@
-[gd_scene load_steps=17 format=4 uid="uid://dv7uos683cwty"]
+[gd_scene load_steps=18 format=4 uid="uid://dv7uos683cwty"]
 
 [ext_resource type="Script" uid="uid://bojgw5ril2ea4" path="res://scenes/player/car_2.gd" id="1_tfdpf"]
 [ext_resource type="Texture2D" uid="uid://dg4k33db8mnwp" path="res://assets/models/general-lee/general-lee_Car Texture 1.png" id="2_ylt6k"]
 [ext_resource type="Texture2D" uid="uid://c11g33j2yye57" path="res://assets/models/general-lee/tire_Car Texture 1.png" id="3_a0or6"]
 [ext_resource type="Script" uid="uid://db4ab04chsk8e" path="res://scenes/player/raycast_wheel_2.gd" id="3_ylt6k"]
-[ext_resource type="Script" uid="uid://b5mdrjubj0lg5" path="res://examples_dd3d/demo_camera_movement.gd" id="5_520g0"]
+[ext_resource type="Script" uid="uid://br3eqy0fiws2n" path="res://scenes/player/chase_cam.gd" id="5_tfdpf"]
+[ext_resource type="Script" uid="uid://by2kix65oufyr" path="res://scenes/player/angle_cam.gd" id="6_ylt6k"]
 
 [sub_resource type="Curve" id="Curve_ylt6k"]
 _data = [Vector2(0, 0.522162), 0.0, 0.0, 0, 0, Vector2(0.265193, 0.838378), 0.0, 0.0, 0, 0, Vector2(0.569061, 0.845405), 0.0, 0.0, 0, 0, Vector2(0.732044, 0.845405), 0.0, 0.0, 0, 0, Vector2(0.814917, 0.255135), 0.0, 0.0, 0, 0]
 point_count = 5
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dcjsu"]
-size = Vector3(1.885, 0.963887, 3.53789)
+size = Vector3(1.885, 1.02808, 3.53789)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bkt3q"]
 resource_name = "Material.car2"
@@ -110,135 +111,192 @@ size = Vector3(0.25, 0.5, 0.01)
 collision_mask = 2
 mass = 50.0
 script = ExtResource("1_tfdpf")
-ray_cast_wheels = [NodePath("WheelDF"), NodePath("WheelPF"), NodePath("WheelPR"), NodePath("WheelDR")]
+ray_cast_wheels = [NodePath("Wheels/WheelDF"), NodePath("Wheels/WheelPF"), NodePath("Wheels/WheelPR"), NodePath("Wheels/WheelDR")]
 accel_curve = SubResource("Curve_ylt6k")
-text_groups_title_font_size = 85
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.176557, 0.286055)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14446, 0.286055)
 shape = SubResource("BoxShape3D_dcjsu")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(-4.37114e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, -4.37114e-08, 1.91069e-15, 0, -0.64, 0)
+layers = 512
+cast_shadow = 2
+gi_mode = 2
 mesh = SubResource("ArrayMesh_a3ipj")
 skeleton = NodePath("")
 
-[node name="Camera_Controller" type="Node3D" parent="."]
+[node name="CameraPivot" type="Node3D" parent="."]
+top_level = true
 
-[node name="Camera_Target" type="Node3D" parent="Camera_Controller"]
-transform = Transform3D(1, 0, 0, 0, 0.932935, 0.360046, 0, -0.360046, 0.932935, 0, 2.45243, 6.36307)
-
-[node name="Camera3D" type="Camera3D" parent="Camera_Controller/Camera_Target"]
-transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-current = true
-
-[node name="WheelDF" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.749, -0.319, -1.232)
-script = ExtResource("3_ylt6k")
-over_extend = 0.0
-grip_curve = SubResource("Curve_tfdpf")
-x_traction = 1.0
-z_traction = 0.1
-is_steer = true
-show_debug = true
-
-[node name="Mesh" type="MeshInstance3D" parent="WheelDF"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("ArrayMesh_lexfh")
-skeleton = NodePath("")
-
-[node name="RotationIndicator" type="MeshInstance3D" parent="WheelDF/Mesh"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111142, 0.00744265, 0)
-mesh = SubResource("BoxMesh_q8nvf")
-
-[node name="FloorRay" type="RayCast3D" parent="WheelDF"]
-enabled = false
-target_position = Vector3(0, -0.5, 0)
-collision_mask = 2
-
-[node name="Timer" type="Timer" parent="WheelDF"]
-autostart = true
-
-[node name="WheelPF" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.749, -0.319, -1.232)
-script = ExtResource("3_ylt6k")
-over_extend = 0.0
-grip_curve = SubResource("Curve_tfdpf")
-x_traction = 1.0
-z_traction = 0.1
-is_steer = true
-show_debug = true
-
-[node name="Mesh" type="MeshInstance3D" parent="WheelPF"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("ArrayMesh_lexfh")
-skeleton = NodePath("")
-
-[node name="RotationIndicator" type="MeshInstance3D" parent="WheelPF/Mesh"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111142, 0.00744265, 0)
-mesh = SubResource("BoxMesh_q8nvf")
-
-[node name="FloorRay" type="RayCast3D" parent="WheelPF"]
-enabled = false
-target_position = Vector3(0, -0.5, 0)
-collision_mask = 2
-
-[node name="WheelPR" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.749, -0.319, 1.223)
-script = ExtResource("3_ylt6k")
-over_extend = 0.0
-grip_curve = SubResource("Curve_tfdpf")
-x_traction = 1.0
-z_traction = 0.1
-is_motor = true
-show_debug = true
-
-[node name="Mesh" type="MeshInstance3D" parent="WheelPR"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("ArrayMesh_lexfh")
-skeleton = NodePath("")
-
-[node name="RotationIndicator" type="MeshInstance3D" parent="WheelPR/Mesh"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111142, 0.00744265, 0)
-mesh = SubResource("BoxMesh_q8nvf")
-
-[node name="FloorRay" type="RayCast3D" parent="WheelPR"]
-enabled = false
-target_position = Vector3(0, -0.5, 0)
-collision_mask = 2
-
-[node name="WheelDR" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.749, -0.319, 1.223)
-script = ExtResource("3_ylt6k")
-over_extend = 0.0
-grip_curve = SubResource("Curve_tfdpf")
-x_traction = 1.0
-z_traction = 0.1
-is_motor = true
-show_debug = true
-
-[node name="Mesh" type="MeshInstance3D" parent="WheelDR"]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("ArrayMesh_lexfh")
-skeleton = NodePath("")
-
-[node name="RotationIndicator" type="MeshInstance3D" parent="WheelDR/Mesh"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111142, 0.00744265, 0)
-mesh = SubResource("BoxMesh_q8nvf")
-
-[node name="FloorRay" type="RayCast3D" parent="WheelDR"]
-enabled = false
-target_position = Vector3(0, -0.5, 0)
-collision_mask = 2
-
-[node name="Camera" type="Camera3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.40258, -0.320976, 0.140139)
-visible = false
+[node name="ChaseCam" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 0.0338072, 1.31035, 5.74382)
+top_level = true
 cull_mask = 1
-current = true
 fov = 53.0
 near = 0.001
 far = 100.0
-script = ExtResource("5_520g0")
+script = ExtResource("5_tfdpf")
 
-[connection signal="timeout" from="WheelDF/Timer" to="WheelDF" method="_on_timer_timeout"]
+[node name="AngleCam" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.87129, 6.31608)
+current = true
+script = ExtResource("6_ylt6k")
+
+[node name="FixedCam" type="Camera3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.3079, -1.03126, 1.21306)
+projection = 1
+size = 3.76
+
+[node name="Lights" type="Node3D" parent="."]
+
+[node name="HeadLightP" type="Node3D" parent="Lights"]
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Lights/HeadLightP"]
+transform = Transform3D(1, 0, 0, 0, 0.978148, 0.207912, 0, -0.207912, 0.978148, 0.674645, 0, -1.59455)
+light_energy = 10.0
+spot_range = 200.0
+spot_angle = 15.0
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="Lights/HeadLightP"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0.674645, 0, -2.12247)
+layers = 512
+light_energy = 100.0
+light_cull_mask = 4293919232
+shadow_enabled = true
+spot_range = 200.0
+spot_angle = 15.0
+spot_angle_attenuation = 33.128
+
+[node name="HeadLightD" type="Node3D" parent="Lights"]
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Lights/HeadLightD"]
+transform = Transform3D(1, 0, 0, 0, 0.978148, 0.207912, 0, -0.207912, 0.978148, -0.675, 0, -1.595)
+light_energy = 10.0
+spot_range = 200.0
+spot_angle = 15.0
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="Lights/HeadLightD"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -0.675, 0, -2.122)
+layers = 512
+light_energy = 100.0
+light_cull_mask = 4293919232
+shadow_enabled = true
+spot_range = 200.0
+spot_angle = 15.0
+spot_angle_attenuation = 33.128
+
+[node name="Wheels" type="Node3D" parent="."]
+
+[node name="WheelDF" type="Node3D" parent="Wheels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.749, -0.319, -1.232)
+script = ExtResource("3_ylt6k")
+spring_strength = 4000
+rest_dist = 0.15
+over_extend = 0.1
+grip_curve = SubResource("Curve_tfdpf")
+x_traction = 10.0
+z_traction = 0.1
+tire_turn_speed = 10.0
+is_steer = true
+
+[node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelDF"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("ArrayMesh_lexfh")
+skeleton = NodePath("")
+
+[node name="RotationIndicator" type="MeshInstance3D" parent="Wheels/WheelDF/Mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111142, 0.00744265, 0)
+visible = false
+mesh = SubResource("BoxMesh_q8nvf")
+
+[node name="FloorRay" type="RayCast3D" parent="Wheels/WheelDF"]
+enabled = false
+target_position = Vector3(0, 2, 0)
+collision_mask = 2
+
+[node name="Timer" type="Timer" parent="Wheels/WheelDF"]
+autostart = true
+
+[node name="WheelPF" type="Node3D" parent="Wheels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.749, -0.319, -1.232)
+script = ExtResource("3_ylt6k")
+spring_strength = 4000
+rest_dist = 0.15
+over_extend = 0.1
+grip_curve = SubResource("Curve_tfdpf")
+x_traction = 10.0
+z_traction = 0.1
+tire_turn_speed = 10.0
+is_steer = true
+
+[node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelPF"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("ArrayMesh_lexfh")
+skeleton = NodePath("")
+
+[node name="RotationIndicator" type="MeshInstance3D" parent="Wheels/WheelPF/Mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111142, 0.00744265, 0)
+visible = false
+mesh = SubResource("BoxMesh_q8nvf")
+
+[node name="FloorRay" type="RayCast3D" parent="Wheels/WheelPF"]
+enabled = false
+target_position = Vector3(0, 2, 0)
+collision_mask = 2
+
+[node name="WheelPR" type="Node3D" parent="Wheels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.749, -0.319, 1.223)
+script = ExtResource("3_ylt6k")
+spring_strength = 4000
+rest_dist = 0.15
+over_extend = 0.1
+grip_curve = SubResource("Curve_tfdpf")
+x_traction = 10.0
+z_traction = 0.1
+tire_max_turn_degrees = 35
+is_motor = true
+
+[node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelPR"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("ArrayMesh_lexfh")
+skeleton = NodePath("")
+
+[node name="RotationIndicator" type="MeshInstance3D" parent="Wheels/WheelPR/Mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111142, 0.00744265, 0)
+visible = false
+mesh = SubResource("BoxMesh_q8nvf")
+
+[node name="FloorRay" type="RayCast3D" parent="Wheels/WheelPR"]
+enabled = false
+target_position = Vector3(0, 2, 0)
+collision_mask = 2
+
+[node name="WheelDR" type="Node3D" parent="Wheels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.749, -0.319, 1.223)
+script = ExtResource("3_ylt6k")
+spring_strength = 4000
+rest_dist = 0.15
+over_extend = 0.1
+grip_curve = SubResource("Curve_tfdpf")
+x_traction = 10.0
+z_traction = 0.1
+tire_max_turn_degrees = 35
+is_motor = true
+
+[node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelDR"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("ArrayMesh_lexfh")
+skeleton = NodePath("")
+
+[node name="RotationIndicator" type="MeshInstance3D" parent="Wheels/WheelDR/Mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111142, 0.00744265, 0)
+visible = false
+mesh = SubResource("BoxMesh_q8nvf")
+
+[node name="FloorRay" type="RayCast3D" parent="Wheels/WheelDR"]
+enabled = false
+target_position = Vector3(0, 2, 0)
+collision_mask = 2
+
+[connection signal="timeout" from="Wheels/WheelDF/Timer" to="Wheels/WheelDF" method="_on_timer_timeout"]

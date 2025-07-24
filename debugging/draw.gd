@@ -14,3 +14,6 @@ static func text_at_position(position: Vector3, text: String, font_size: int = 1
 
 static func box(position: Vector3, rotation: Quaternion, size: Vector3, color: Color):
 		DebugDraw3D.draw_box(position, rotation, size, Color.AQUA, true, 0.001)
+
+static func gui_box(key: String, color: Color):
+	DebugDraw2D.set_text(key, "█", 7, color)
