@@ -4,6 +4,7 @@ class_name Vehicle
 @export_category("Car")
 @export_group("Wheels")
 @export var ray_cast_wheels: Array[RayCastWheel2]
+@export var max_tire_angle_curve: Curve
 @export_group("Stats")
 @export var acceleration := 3000.0
 @export var max_speed := 30

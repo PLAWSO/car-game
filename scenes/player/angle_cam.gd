@@ -33,8 +33,18 @@ func _physics_process(delta: float) -> void:
 		return
 	
 	# set top-down angle of pivot
-	var direction = Vector3(player_velocity.x, 0, player_velocity.z).normalized()
+	#var direction = Vector3(player_velocity.x, 0, player_velocity.z).normalized()
+	#pivot.look_at(pivot.global_position + direction, Vector3.UP)
+	var current_position := -pivot.global_transform.basis.z.normalized()
+	var target_position := Vector3(player_velocity.x, 0, player_velocity.z).normalized()
+	
+	var direction = lerp(current_position, target_position, 1.0 - exp(-10 * delta))
 	pivot.look_at(pivot.global_position + direction, Vector3.UP)
+	
+	#var current_basis = pivot.global_transform.basis
+	#var t = 1.0 - exp(-1000000 * delta)
+	#pivot.global_transform.basis = current_basis.slerp(target_basis, t)
+	#pivot.look_at(lerp(pivot.basis.looking_at(), pivot.global_position + direction, 1.0 - exp(-100 * delta)), Vector3.UP)
 	
 	
 	# convert local offset to world space:
@@ -43,8 +53,8 @@ func _physics_process(delta: float) -> void:
 	#pivot.global_position = player.global_position + world_offset
 	
 	# set camera "look at" position (in front of player)
-	var local_look_at_offset = Vector3(0, 1, -3)
-	var world_look_at_offset = player.global_transform.basis * local_look_at_offset
+	#var local_look_at_offset = Vector3(0, 1, -3)
+	#var world_look_at_offset = player.global_transform.basis * local_look_at_offset
 	#look_at_from_position(global_position, player.global_position + world_look_at_offset, Vector3.UP)
 
 #func _physics_process(delta: float) -> void:
