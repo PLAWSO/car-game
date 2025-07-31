@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=4 uid="uid://dv7uos683cwty"]
+[gd_scene load_steps=19 format=4 uid="uid://dv7uos683cwty"]
 
 [ext_resource type="Script" uid="uid://bojgw5ril2ea4" path="res://scenes/player/car_2.gd" id="1_tfdpf"]
 [ext_resource type="Texture2D" uid="uid://dg4k33db8mnwp" path="res://assets/models/general-lee/general-lee_Car Texture 1.png" id="2_ylt6k"]
@@ -6,10 +6,6 @@
 [ext_resource type="Script" uid="uid://db4ab04chsk8e" path="res://scenes/player/raycast_wheel_2.gd" id="3_ylt6k"]
 [ext_resource type="Script" uid="uid://br3eqy0fiws2n" path="res://scenes/player/chase_cam.gd" id="5_tfdpf"]
 [ext_resource type="Script" uid="uid://by2kix65oufyr" path="res://scenes/player/angle_cam.gd" id="6_ylt6k"]
-
-[sub_resource type="Curve" id="Curve_ylt6k"]
-_data = [Vector2(0, 0.522162), 0.0, 0.0, 0, 0, Vector2(0.265193, 0.838378), 0.0, 0.0, 0, 0, Vector2(0.569061, 0.845405), 0.0, 0.0, 0, 0, Vector2(0.732044, 0.845405), 0.0, 0.0, 0, 0, Vector2(0.814917, 0.255135), 0.0, 0.0, 0, 0]
-point_count = 5
 
 [sub_resource type="Curve" id="Curve_xor5f"]
 _limits = [0.0, 1.0, 0.0, 12000.0]
@@ -61,11 +57,12 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_2cent")
 
 [sub_resource type="Curve" id="Curve_tfdpf"]
-_data = [Vector2(0.0432357, 0.853015), 0.0, 0.0, 0, 0, Vector2(0.603518, 0.763862), 0.0, 0.0, 0, 0, Vector2(0.894452, 0.0771989), 0.0, 0.0, 0, 0]
+_data = [Vector2(0.0195258, 1), 0.0, 0.0, 0, 0, Vector2(0.129707, 1), 0.0, 0.0, 0, 0, Vector2(0.152022, 0.0331657), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="Curve" id="Curve_a0or6"]
-_data = [Vector2(0, 1), 0.0, -0.947095, 0, 1, Vector2(1, 0.0529054), -0.947095, 0.0, 1, 0]
+[sub_resource type="Curve" id="Curve_ylt6k"]
+_limits = [0.0, 1.0, 0.0, 200.0]
+_data = [Vector2(0, 1), 0.0, -0.0215292, 0, 0, Vector2(43.222, 0.119693), 0.000583625, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ee3hb"]
@@ -122,10 +119,10 @@ mass = 500.0
 script = ExtResource("1_tfdpf")
 ray_cast_wheels = [NodePath("Wheels/WheelDF"), NodePath("Wheels/WheelPF"), NodePath("Wheels/WheelPR"), NodePath("Wheels/WheelDR")]
 z_traction = 0.01
-accel_curve = SubResource("Curve_ylt6k")
 max_horsepower = 300
 power_curve = SubResource("Curve_xor5f")
 gears = Array[float]([0.0, 2.0, 1.2, 1.0])
+show_debug = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14446, 0.286055)
@@ -210,10 +207,9 @@ spring_damping = 1000
 rest_dist = 0.15
 over_extend = 0.1
 grip_curve = SubResource("Curve_tfdpf")
-x_traction = 10.0
 z_traction = 0.1
 tire_turn_speed = 2.0
-max_turn_curve = SubResource("Curve_a0or6")
+turn_radius_curve = SubResource("Curve_ylt6k")
 is_steer = true
 
 [node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelDF"]
@@ -242,10 +238,9 @@ spring_damping = 1000
 rest_dist = 0.15
 over_extend = 0.1
 grip_curve = SubResource("Curve_tfdpf")
-x_traction = 10.0
 z_traction = 0.1
 tire_turn_speed = 2.0
-max_turn_curve = SubResource("Curve_a0or6")
+turn_radius_curve = SubResource("Curve_ylt6k")
 is_steer = true
 
 [node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelPF"]
@@ -272,10 +267,9 @@ spring_damping = 1000
 rest_dist = 0.15
 over_extend = 0.1
 grip_curve = SubResource("Curve_tfdpf")
-x_traction = 10.0
 z_traction = 0.1
 tire_max_turn_degrees = 35
-max_turn_curve = SubResource("Curve_a0or6")
+turn_radius_curve = SubResource("Curve_ylt6k")
 is_motor = true
 
 [node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelPR"]
@@ -302,10 +296,9 @@ spring_damping = 1000
 rest_dist = 0.15
 over_extend = 0.1
 grip_curve = SubResource("Curve_tfdpf")
-x_traction = 10.0
 z_traction = 0.1
 tire_max_turn_degrees = 35
-max_turn_curve = SubResource("Curve_a0or6")
+turn_radius_curve = SubResource("Curve_ylt6k")
 is_motor = true
 
 [node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelDR"]
