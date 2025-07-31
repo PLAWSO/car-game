@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://dv7uos683cwty"]
+[gd_scene load_steps=20 format=4 uid="uid://dv7uos683cwty"]
 
 [ext_resource type="Script" uid="uid://bojgw5ril2ea4" path="res://scenes/player/car_2.gd" id="1_tfdpf"]
 [ext_resource type="Texture2D" uid="uid://dg4k33db8mnwp" path="res://assets/models/general-lee/general-lee_Car Texture 1.png" id="2_ylt6k"]
@@ -9,6 +9,11 @@
 
 [sub_resource type="Curve" id="Curve_ylt6k"]
 _data = [Vector2(0, 0.522162), 0.0, 0.0, 0, 0, Vector2(0.265193, 0.838378), 0.0, 0.0, 0, 0, Vector2(0.569061, 0.845405), 0.0, 0.0, 0, 0, Vector2(0.732044, 0.845405), 0.0, 0.0, 0, 0, Vector2(0.814917, 0.255135), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="Curve" id="Curve_xor5f"]
+_limits = [0.0, 1.0, 0.0, 12000.0]
+_data = [Vector2(410.256, 0.0964127), 0.0, 0.0, 0, 0, Vector2(2364.09, 0.457294), 0.000322155, 0.000322155, 0, 0, Vector2(5027.43, 0.787908), 0.0, 0.0, 0, 0, Vector2(7331.67, 0.800384), 0.0, 0.0, 0, 0, Vector2(12000, 0.744242), 0.0, 0.0, 0, 0]
 point_count = 5
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dcjsu"]
@@ -56,8 +61,12 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_2cent")
 
 [sub_resource type="Curve" id="Curve_tfdpf"]
-_data = [Vector2(0.0432357, 0.853015), 0.0, 0.0, 0, 0, Vector2(0.563459, 0.640703), 0.0, 0.0, 0, 0, Vector2(0.754533, 0.065829), 0.0, 0.0, 0, 0]
+_data = [Vector2(0.0432357, 0.853015), 0.0, 0.0, 0, 0, Vector2(0.603518, 0.763862), 0.0, 0.0, 0, 0, Vector2(0.894452, 0.0771989), 0.0, 0.0, 0, 0]
 point_count = 3
+
+[sub_resource type="Curve" id="Curve_a0or6"]
+_data = [Vector2(0, 1), 0.0, -0.947095, 0, 1, Vector2(1, 0.0529054), -0.947095, 0.0, 1, 0]
+point_count = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ee3hb"]
 resource_name = "Material.car2"
@@ -109,10 +118,14 @@ size = Vector3(0.25, 0.5, 0.01)
 
 [node name="Car2" type="RigidBody3D" node_paths=PackedStringArray("ray_cast_wheels")]
 collision_mask = 2
-mass = 50.0
+mass = 500.0
 script = ExtResource("1_tfdpf")
 ray_cast_wheels = [NodePath("Wheels/WheelDF"), NodePath("Wheels/WheelPF"), NodePath("Wheels/WheelPR"), NodePath("Wheels/WheelDR")]
+z_traction = 0.01
 accel_curve = SubResource("Curve_ylt6k")
+max_horsepower = 300
+power_curve = SubResource("Curve_xor5f")
+gears = Array[float]([0.0, 2.0, 1.2, 1.0])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14446, 0.286055)
@@ -188,16 +201,19 @@ spot_angle_attenuation = 33.128
 
 [node name="Wheels" type="Node3D" parent="."]
 
-[node name="WheelDF" type="Node3D" parent="Wheels"]
+[node name="WheelDF" type="Node3D" parent="Wheels" node_paths=PackedStringArray("vehicle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.749, -0.319, -1.232)
 script = ExtResource("3_ylt6k")
-spring_strength = 4000
+vehicle = NodePath("../..")
+spring_strength = 25000
+spring_damping = 1000
 rest_dist = 0.15
 over_extend = 0.1
 grip_curve = SubResource("Curve_tfdpf")
 x_traction = 10.0
 z_traction = 0.1
-tire_turn_speed = 10.0
+tire_turn_speed = 2.0
+max_turn_curve = SubResource("Curve_a0or6")
 is_steer = true
 
 [node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelDF"]
@@ -207,7 +223,6 @@ skeleton = NodePath("")
 
 [node name="RotationIndicator" type="MeshInstance3D" parent="Wheels/WheelDF/Mesh"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111142, 0.00744265, 0)
-visible = false
 mesh = SubResource("BoxMesh_q8nvf")
 
 [node name="FloorRay" type="RayCast3D" parent="Wheels/WheelDF"]
@@ -218,16 +233,19 @@ collision_mask = 2
 [node name="Timer" type="Timer" parent="Wheels/WheelDF"]
 autostart = true
 
-[node name="WheelPF" type="Node3D" parent="Wheels"]
+[node name="WheelPF" type="Node3D" parent="Wheels" node_paths=PackedStringArray("vehicle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.749, -0.319, -1.232)
 script = ExtResource("3_ylt6k")
-spring_strength = 4000
+vehicle = NodePath("../..")
+spring_strength = 25000
+spring_damping = 1000
 rest_dist = 0.15
 over_extend = 0.1
 grip_curve = SubResource("Curve_tfdpf")
 x_traction = 10.0
 z_traction = 0.1
-tire_turn_speed = 10.0
+tire_turn_speed = 2.0
+max_turn_curve = SubResource("Curve_a0or6")
 is_steer = true
 
 [node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelPF"]
@@ -245,16 +263,19 @@ enabled = false
 target_position = Vector3(0, 2, 0)
 collision_mask = 2
 
-[node name="WheelPR" type="Node3D" parent="Wheels"]
+[node name="WheelPR" type="Node3D" parent="Wheels" node_paths=PackedStringArray("vehicle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.749, -0.319, 1.223)
 script = ExtResource("3_ylt6k")
-spring_strength = 4000
+vehicle = NodePath("../..")
+spring_strength = 25000
+spring_damping = 1000
 rest_dist = 0.15
 over_extend = 0.1
 grip_curve = SubResource("Curve_tfdpf")
 x_traction = 10.0
 z_traction = 0.1
 tire_max_turn_degrees = 35
+max_turn_curve = SubResource("Curve_a0or6")
 is_motor = true
 
 [node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelPR"]
@@ -272,16 +293,19 @@ enabled = false
 target_position = Vector3(0, 2, 0)
 collision_mask = 2
 
-[node name="WheelDR" type="Node3D" parent="Wheels"]
+[node name="WheelDR" type="Node3D" parent="Wheels" node_paths=PackedStringArray("vehicle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.749, -0.319, 1.223)
 script = ExtResource("3_ylt6k")
-spring_strength = 4000
+vehicle = NodePath("../..")
+spring_strength = 25000
+spring_damping = 1000
 rest_dist = 0.15
 over_extend = 0.1
 grip_curve = SubResource("Curve_tfdpf")
 x_traction = 10.0
 z_traction = 0.1
 tire_max_turn_degrees = 35
+max_turn_curve = SubResource("Curve_a0or6")
 is_motor = true
 
 [node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelDR"]

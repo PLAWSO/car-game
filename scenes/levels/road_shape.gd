@@ -3,7 +3,6 @@
 extends Path3D
 
 func _ready():
-	print("LOADING ROAD SHAPE")
 	# Only do this in the editor
 	if not Engine.is_editor_hint():
 		return
@@ -21,5 +20,3 @@ func _ready():
 			curve.set_point_in(i, in_tangent.normalized() * 2.0)
 		if out_tangent.length() > 0.001:
 			curve.set_point_out(i, out_tangent.normalized() * 2.0)
-
-	print("Tangent handles scaled.")
