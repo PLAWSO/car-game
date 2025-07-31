@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://ul1w4gg7kpwi"]
+[gd_scene load_steps=10 format=3 uid="uid://ul1w4gg7kpwi"]
 
 [ext_resource type="AudioStream" uid="uid://lagliydwmweo" path="res://assets/sound-effects/enemy-lose4.ogg" id="1_g5net"]
 [ext_resource type="Script" uid="uid://c553mv3sh1ivo" path="res://scenes/managers/sound_manager.gd" id="1_mdjn0"]
@@ -7,6 +7,8 @@
 [ext_resource type="AudioStream" uid="uid://dx552di7urbv2" path="res://assets/sound-effects/fall-gameover2.ogg" id="5_7jwsb"]
 [ext_resource type="AudioStream" uid="uid://ilnww5uwd6ay" path="res://assets/music/Menu-RetroMystic.ogg" id="6_7jwsb"]
 [ext_resource type="AudioStream" uid="uid://qp8ate6w5ajj" path="res://assets/music/Level-RetroBeat.ogg" id="7_h42hm"]
+[ext_resource type="AudioStream" uid="uid://d2lyg5nsdhums" path="res://assets/sound-effects/vehicle_idle.ogg" id="8_ilh7p"]
+[ext_resource type="AudioStream" uid="uid://coohmubfsme28" path="res://assets/sound-effects/vehicle-run.ogg" id="9_uo420"]
 
 [node name="SoundManager" type="Control"]
 layout_mode = 3
@@ -40,3 +42,13 @@ volume_db = -19.328
 [node name="MusicLevel" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_h42hm")
 volume_db = -19.328
+
+[node name="VehicleIdle" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_ilh7p")
+volume_db = -18.688
+pitch_scale = 1.6
+
+[node name="VehicleRun" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_uo420")
+volume_db = -5.341
+pitch_scale = 1.6

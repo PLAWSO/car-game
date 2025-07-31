@@ -15,8 +15,9 @@ class_name RayCastWheel2
 @export var grip_curve: Curve
 @export var x_traction: float
 @export var z_traction: float
-@export var tire_turn_speed := 2.0
+@export var tire_turn_speed := 0.1
 @export var tire_max_turn_degrees := 25
+@export var max_turn_curve: Curve
 
 @export_group("Motor")
 @export var is_motor := false
@@ -49,6 +50,9 @@ var grip_ratio: float
 var grip_factor: float
 var z_grip_factor: float
 var gravity: float
+var offset: float
+var speed_ratio: float
+var calculatedRPM: int
 
 ## set on _ready
 var vehicle_mass: float
@@ -85,9 +89,9 @@ func do_wheel_steer():
 	if not is_steer: return
 	
 	var turn_input := Input.get_axis("turn_right", "turn_left") * tire_turn_speed
+	var max_turn := self.max_turn_curve.sample_baked(self.speed_ratio) * tire_max_turn_degrees
 	if turn_input:
-		rotation.y = clampf(rotation.y + turn_input * physics_delta,
-		deg_to_rad(-tire_max_turn_degrees), deg_to_rad(tire_max_turn_degrees))
+		rotation.y = clampf(rotation.y + turn_input * physics_delta, deg_to_rad(-max_turn), deg_to_rad(max_turn))
 	else:
 		rotation.y = move_toward(rotation.y, 0, tire_turn_speed * physics_delta)
 
@@ -102,10 +106,14 @@ func do_return_to_rest():
 
 func calc_shared_values(delta):
 	self.contact_point = self.ray.get_collision_point()
+	self.spring_length = self.ray.global_position.distance_to(self.contact_point) - self.wheel_radius
+	self.offset = self.rest_dist - spring_length
+	var tire_mesh_position = Vector3(self.mesh.global_position)
+	#tire_mesh_position.y = -(self.spring_length)
+	self.contact_point = tire_mesh_position
 	self.force_position = self.contact_point - vehicle.global_position
 	self.ray_forward = -self.ray.global_basis.z
 	self.vehicle_forward_velocity = self.ray_forward.dot(vehicle.linear_velocity)
-	self.spring_length = self.ray.global_position.distance_to(self.contact_point) - self.wheel_radius
 	self.physics_delta = delta
 	self.tire_velocity = get_point_velocity(self.vehicle, self.contact_point)
 	self.steering_velocity = self.ray.global_basis.x.dot(tire_velocity)
@@ -113,12 +121,15 @@ func calc_shared_values(delta):
 	self.grip_factor = self.grip_curve.sample_baked(self.grip_ratio)
 	self.gravity = -self.vehicle.get_gravity().y
 	self.z_grip_factor = z_traction
-	if vehicle.hand_brake:
-		self.grip_factor = 0
-		self.z_grip_factor = 0
+	if is_slipping:
+		self.grip_factor = 0.5
+		self.z_grip_factor = 0.5
+	self.speed_ratio = vehicle_forward_velocity / vehicle.max_speed
+
 
 func do_wheel_physics():
-	var apply_acceleration := true
+	#var apply_acceleration := vehicle_forward_velocity < vehicle.max_speed and is_motor and vehicle.motor_input and vehicle.current_gear == 1
+	var apply_acceleration := is_motor and vehicle.motor_input
 	if apply_acceleration:
 		self.acceleration_force = calc_acceleration_force()
 		vehicle.apply_force(self.acceleration_force, self.force_position)
@@ -133,7 +144,8 @@ func do_wheel_physics():
 		self.steering_force = calc_steering_force()
 		vehicle.apply_force(self.steering_force, self.force_position)
 	
-	var apply_drag := is_motor and !vehicle.motor_input
+	#var apply_drag := is_motor and !vehicle.motor_input
+	var apply_drag := false
 	if apply_drag:
 		self.drag_force = calc_drag_force()
 		vehicle.apply_force(self.drag_force, self.force_position)
@@ -148,11 +160,11 @@ func calc_steering_force() -> Vector3:
 	return -ray.global_basis.x * steering_velocity * grip_factor * ((vehicle_mass * gravity)/ vehicle.total_wheels)
 
 func calc_acceleration_force() -> Vector3:
-	if is_motor and vehicle.motor_input:
-		var speed_ratio := vehicle_forward_velocity / vehicle.max_speed
-		var speed_factor := vehicle.accel_curve.sample_baked(speed_ratio)
-		return ray_forward * vehicle.acceleration * vehicle.motor_input * speed_factor
-	return Vector3()
+	#var speed_factor := vehicle.accel_curve.sample_baked(speed_ratio)
+	## if new speed is x amount higher
+	#return ray_forward * vehicle.acceleration * vehicle.motor_input * speed_factor
+	return ray_forward * vehicle.motor_input * vehicle.wheel_torque / wheel_radius
+
 
 func calc_spring_force() -> Vector3:
 	var offset := self.rest_dist - self.spring_length
