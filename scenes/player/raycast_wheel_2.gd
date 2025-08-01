@@ -14,11 +14,11 @@ class_name RayCastWheel2
 
 @export_group("Wheel Properties")
 @export var wheel_radius := 0.3
-@export var grip_curve: Curve
-@export var z_traction: float
 @export var tire_turn_speed := 0.1
 @export var tire_max_turn_degrees := 25
 @export var turn_radius_curve: Curve
+@export var rolling_coef := 0.02 # approx 0.007 - 0.02
+@export var braking_coef := 100
 
 @export_group("Functions")
 @export var is_motor := false
@@ -31,44 +31,36 @@ class_name RayCastWheel2
 #region On Ready Variables
 @onready var mesh: Node3D = self.get_node("Mesh") # should be mesh instance, no?
 @onready var ray: RayCast3D = self.get_node("FloorRay")
-@onready var rotation_indicator: MeshInstance3D = self.get_node("Mesh/RotationIndicator")
-
 @onready var force_pos_timer: Timer = self.get_node("Timer")
 #endregion
 
 #region Physics Variables (updated near the start of every physics frame)
-var force_position: Vector3
+var vehicle_wheel_center_offset: Vector3
 var contact_point: Vector3
-var ray_forward: Vector3
-var vehicle_forward_velocity: float
 var spring_length: float
 var physics_delta: float
-var tire_velocity: Vector3
-#var last_force_pos
-var steering_velocity: float
-var grip_ratio: float
-var grip_factor: float
-var z_grip_factor: float
-var gravity: float
-var offset: float
-var calculatedRPM: int
 var is_slipping := false
+var wheel_velocity: Vector3
 #endregion
 
 #region Lifetime Variables (set on _ready)
 var vehicle_mass: float
+var resting_weight_on_wheel: float
 #endregion
 
 #region Physics Forces 
 var acceleration_force: Vector3
 var spring_force: Vector3
 var steering_force: Vector3
-var drag_force: Vector3
+var rolling_resistance_force: Vector3
+var braking_force: Vector3
 #endregion
 
 func _ready() -> void:
+	await get_tree().process_frame
 	self.vehicle_mass = vehicle.mass
 	ray.target_position.y = -(rest_dist + wheel_radius + over_extend)
+	self.resting_weight_on_wheel = ((vehicle_mass * -self.vehicle.get_gravity().y) / vehicle.total_wheels)
 
 #region Do Wheel Process (function called from Vehicle every physics frame)
 func do_wheel_process(body: Vehicle, delta: float):
@@ -84,9 +76,7 @@ func do_wheel_process(body: Vehicle, delta: float):
 		do_return_to_rest()
 	
 	do_wheel_spin()
-	
-	if show_debug:
-		Draw.vector(ray.global_position + Vector3(1, 0, 0), ray.target_position, Color.WEB_PURPLE)
+
 #endregion
 
 #region Move Wheel
@@ -103,6 +93,7 @@ func do_wheel_steer():
 func do_wheel_spin():
 	pass
 	## visually spin wheel
+	## I think we want this to be based on engine speed only?
 	#mesh.rotate_x((-vehicle_forward_velocity * delta) / wheel_radius)
 
 func do_return_to_rest():
@@ -114,79 +105,97 @@ func do_return_to_rest():
 func calc_shared_values(delta):
 	self.contact_point = self.ray.get_collision_point()
 	self.spring_length = self.ray.global_position.distance_to(self.contact_point) - self.wheel_radius
-	self.offset = self.rest_dist - spring_length
-	var tire_mesh_position = Vector3(self.mesh.global_position)
-	#tire_mesh_position.y = -(self.spring_length)
-	self.contact_point = tire_mesh_position
-	self.force_position = self.contact_point - vehicle.global_position
-	self.ray_forward = -self.ray.global_basis.z
-	self.vehicle_forward_velocity = self.ray_forward.dot(vehicle.linear_velocity)
+	self.vehicle_wheel_center_offset = Vector3(self.mesh.global_position) - vehicle.global_position
 	self.physics_delta = delta
-	self.tire_velocity = get_point_velocity(self.vehicle, self.contact_point)
-	## steering_velocity = float;  <0, if opposite direction, 0 if perpendicular, >0 if same direction 
-	self.steering_velocity = self.ray.global_basis.x.dot(tire_velocity)
-	Draw.vector(self.force_position + vehicle.global_position, -ray.global_basis.x, Color.BLACK)
-	self.grip_ratio = absf(self.steering_velocity / self.tire_velocity.length())
-	self.grip_factor = self.grip_curve.sample_baked(self.grip_ratio)
-	self.gravity = -self.vehicle.get_gravity().y
-	self.z_grip_factor = z_traction
-	if is_slipping:
-		self.grip_factor = 0.5
-		self.z_grip_factor = 0.5
+	self.wheel_velocity = get_point_velocity(self.vehicle, self.contact_point)
 #endregion
 
 #region Do Wheel Physics
 func do_wheel_physics():
-	#var apply_acceleration := vehicle_forward_velocity < vehicle.max_speed and is_motor and vehicle.motor_input and vehicle.current_gear == 1
-	var apply_acceleration := is_motor and vehicle.motor_input
+	var apply_rolling_resistance := true
+	if apply_rolling_resistance:
+		self.rolling_resistance_force = calc_rolling_resistance_force()
+		vehicle.apply_force(self.rolling_resistance_force, self.vehicle_wheel_center_offset)
+		
+	var apply_acceleration := is_motor and vehicle.motor_input != 0
 	if apply_acceleration:
 		self.acceleration_force = calc_acceleration_force()
-		vehicle.apply_force(self.acceleration_force, self.force_position)
+		var losses = self.rolling_resistance_force.length() + vehicle.drag_force.length()
+		var max_tolerable_acceleration = 10000 # NEEDS MORE ROBUST SOLUTION
+		if (self.acceleration_force.length() - losses) > max_tolerable_acceleration:
+			#self.acceleration_force *= 0.2
+			self.acceleration_force.limit_length(max_tolerable_acceleration)
+			self.is_slipping = true
+			vehicle.apply_force(self.acceleration_force, self.vehicle_wheel_center_offset)
+		else:
+			self.is_slipping = false
+			vehicle.apply_force(self.acceleration_force, self.vehicle_wheel_center_offset)
 	
 	self.spring_force = calc_spring_force()
 	var apply_spring := (vehicle.linear_velocity.y > 0 or self.spring_force.y > 0)
 	if apply_spring:
-		vehicle.apply_force(self.spring_force, self.force_position)
+		vehicle.apply_force(self.spring_force, self.vehicle_wheel_center_offset)
 	
 	var apply_steering := true
 	if apply_steering:
 		self.steering_force = calc_steering_force()
-		vehicle.apply_force(self.steering_force, self.force_position)
+		vehicle.apply_force(self.steering_force, self.vehicle_wheel_center_offset)
 	
-	#var apply_drag := is_motor and !vehicle.motor_input
-	var apply_drag := false
-	if apply_drag:
-		self.drag_force = calc_drag_force()
-		vehicle.apply_force(self.drag_force, self.force_position)
+	var apply_braking := vehicle.brake_input
+	if apply_braking:
+		self.braking_force = calc_braking_force()
+		vehicle.apply_force(self.braking_force, self.vehicle_wheel_center_offset)
 	
 	if self.show_debug:
-		if apply_acceleration: Draw.vector(self.force_position + vehicle.global_position, self.acceleration_force / vehicle_mass, Color.GREEN)
-		if apply_spring: Draw.vector(self.force_position + vehicle.global_position, spring_force / vehicle_mass, Color.BLUE)
-		if apply_steering: Draw.vector(self.force_position + vehicle.global_position, steering_force / vehicle_mass, Color.RED)
-		if apply_drag: Draw.vector(self.force_position + vehicle.global_position, drag_force / vehicle_mass, Color.BLACK)
+		if apply_acceleration: Draw.vector(self.global_position, self.acceleration_force / vehicle_mass, Color.GREEN)
+		if apply_spring: Draw.vector(self.global_position, spring_force / vehicle_mass, Color.BLUE)
+		if apply_steering: Draw.vector(self.global_position, steering_force / vehicle_mass, Color.RED)
+		if apply_rolling_resistance: Draw.vector(self.global_position, rolling_resistance_force / vehicle_mass, Color.BLACK)
+		if apply_braking: Draw.vector(self.global_position, braking_force / vehicle_mass, Color.DEEP_PINK)
 #endregion
 
 #region Calculate Instant Forces
 func calc_steering_force() -> Vector3:
-	DebugDraw2D.set_text("grip_factor: ", grip_factor)
-	grip_factor = 1
-	return -ray.global_basis.x * steering_velocity * grip_factor * ((vehicle_mass * gravity)/ vehicle.total_wheels)
+	## steering_velocity = float;  <0, if opposite direction, 0 if perpendicular, >0 if same direction
+	var steering_velocity := self.ray.global_basis.x.dot(wheel_velocity)
+	var steering_traction_factor := calc_steering_traction_factor()
+	return -ray.global_basis.x * steering_velocity * resting_weight_on_wheel * steering_traction_factor
+
+func calc_steering_traction_factor() -> float:
+	# implement some kind of understeer?
+	# self.spring_force < resting_weight_on_wheel
+	return 1.0
 
 func calc_acceleration_force() -> Vector3:
-	## if new speed is x amount higher
-	#return ray_forward * vehicle.acceleration * vehicle.motor_input * speed_factor
+	var ray_forward = -self.ray.global_basis.z
+	DebugDraw2D.set_text("motor_input", vehicle.motor_input)
 	return ray_forward * vehicle.motor_input * vehicle.wheel_torque / wheel_radius
 
 func calc_spring_force() -> Vector3:
 	var offset := self.rest_dist - self.spring_length
 	var spring_force := spring_strength * offset
-	var tire_velocity := get_point_velocity(vehicle, contact_point)
-	var spring_damp_force := spring_damping * ray.global_basis.y.dot(tire_velocity)
+	var spring_damp_force := spring_damping * ray.global_basis.y.dot(wheel_velocity)
 	return (spring_force - spring_damp_force) * ray.get_collision_normal()
 
-func calc_drag_force() -> Vector3:
-	var forward_velocity := ray_forward.dot(tire_velocity)
-	return ray.global_basis.z * forward_velocity * z_grip_factor * ((vehicle_mass * gravity))
+func calc_rolling_resistance_force() -> Vector3:
+	var forward_dir = -vehicle.global_transform.basis.z
+	forward_dir.y = 0
+	forward_dir = forward_dir.normalized()
+	
+	var flat_velocity = vehicle.linear_velocity
+	flat_velocity.y = 0
+	var forward_speed = flat_velocity.dot(forward_dir)
+	
+	if abs(forward_speed) > 0.1:
+		var resistance_force = -(forward_dir * forward_speed * resting_weight_on_wheel * rolling_coef)
+		return resistance_force
+	
+	return Vector3.ZERO
+
+func calc_braking_force() -> Vector3:
+	var force = -ray.global_basis.z * self.ray.global_basis.z.dot(wheel_velocity) * braking_coef
+	return force
+
 
 #endregion
 
