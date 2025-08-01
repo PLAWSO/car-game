@@ -1,5 +1,5 @@
 extends Node3D
-class_name RayCastWheel2
+class_name RayCastWheel
 
 #region Exported Variables
 @export_group("Vehicle")

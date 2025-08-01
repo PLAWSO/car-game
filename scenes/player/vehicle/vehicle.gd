@@ -4,7 +4,7 @@ class_name Vehicle
 #region Exported Variables
 @export_category("Car")
 @export_group("Wheels")
-@export var ray_cast_wheels: Array[RayCastWheel2]
+@export var ray_cast_wheels: Array[RayCastWheel]
 @export var frames_to_hook_up := 60
 
 @export_group("Drag")

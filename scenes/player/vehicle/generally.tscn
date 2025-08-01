@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bojgw5ril2ea4" path="res://scenes/player/vehicle/vehicle.gd" id="1_tfdpf"]
 [ext_resource type="Texture2D" uid="uid://dg4k33db8mnwp" path="res://assets/models/generally/generally_albedo.png" id="2_ylt6k"]
 [ext_resource type="Texture2D" uid="uid://c11g33j2yye57" path="res://assets/models/generally/generally_tire_alebdo.png" id="3_a0or6"]
-[ext_resource type="Script" uid="uid://db4ab04chsk8e" path="res://scenes/player/raycast_wheel_2.gd" id="3_ylt6k"]
+[ext_resource type="Script" uid="uid://db4ab04chsk8e" path="res://scenes/player/raycast_wheel.gd" id="3_ylt6k"]
 [ext_resource type="Script" uid="uid://br3eqy0fiws2n" path="res://scenes/player/cameras/chase_cam.gd" id="5_tfdpf"]
 [ext_resource type="Script" uid="uid://by2kix65oufyr" path="res://scenes/player/cameras/angle_cam.gd" id="6_ylt6k"]
 
