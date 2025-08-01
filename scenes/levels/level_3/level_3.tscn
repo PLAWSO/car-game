@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://crwyg2qibovj8"]
 
 [ext_resource type="Material" uid="uid://bn0va6gayhe5n" path="res://assets/materials/my_face.tres" id="1_0ljxa"]
-[ext_resource type="PackedScene" uid="uid://dv7uos683cwty" path="res://scenes/player/car_2.tscn" id="2_44gv1"]
-[ext_resource type="Environment" uid="uid://cnwxwcaylpkgk" path="res://resources/level_2_environment.tres" id="3_0ljxa"]
+[ext_resource type="PackedScene" uid="uid://dv7uos683cwty" path="res://scenes/player/vehicle/generally.tscn" id="2_44gv1"]
+[ext_resource type="Environment" uid="uid://cnwxwcaylpkgk" path="res://resources/skyboxes/level_2_environment.tres" id="3_0ljxa"]
 [ext_resource type="Material" uid="uid://cqtjexeus2km0" path="res://assets/materials/brick.tres" id="3_0qepi"]
 [ext_resource type="PackedScene" uid="uid://ciihg03abri1h" path="res://scenes/entities/street_light.tscn" id="4_fmg3e"]
 
