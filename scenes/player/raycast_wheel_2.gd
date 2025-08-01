@@ -175,6 +175,7 @@ func calc_spring_force() -> Vector3:
 	var offset := self.rest_dist - self.spring_length
 	var spring_force := spring_strength * offset
 	var spring_damp_force := spring_damping * ray.global_basis.y.dot(wheel_velocity)
+	## currently pushing global up, change to pushing vehicle up?
 	return (spring_force - spring_damp_force) * ray.get_collision_normal()
 
 func calc_rolling_resistance_force() -> Vector3:

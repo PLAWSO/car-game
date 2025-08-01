@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cjktgdeoup43f"]
 
-[ext_resource type="Script" uid="uid://bfc5kopdpocp7" path="res://scenes/managers/level_manager.gd" id="1_dypyr"]
+[ext_resource type="Script" uid="uid://bfc5kopdpocp7" path="res://scenes/managers/level_manager/level_manager.gd" id="1_dypyr"]
 
 [node name="LevelManager" type="Control"]
 layout_mode = 3

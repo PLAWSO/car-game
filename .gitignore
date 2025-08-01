@@ -3,4 +3,5 @@
 /android/
 assets/
 addons/
-examples_dd3d
+resources/examples/debug_draw_examples
+*.tmp

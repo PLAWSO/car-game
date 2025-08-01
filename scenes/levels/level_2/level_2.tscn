@@ -1,10 +1,10 @@
 [gd_scene load_steps=17 format=3 uid="uid://c1xrcmt5kfank"]
 
-[ext_resource type="Script" uid="uid://c1cuqu17u5go8" path="res://scenes/levels/level_2.gd" id="1_fiq81"]
-[ext_resource type="PackedScene" uid="uid://dv7uos683cwty" path="res://scenes/player/car_2.tscn" id="1_ra442"]
+[ext_resource type="Script" uid="uid://c1cuqu17u5go8" path="res://scenes/levels/level_2/level_2.gd" id="1_fiq81"]
+[ext_resource type="PackedScene" uid="uid://dv7uos683cwty" path="res://scenes/player/vehicle/generally.tscn" id="1_ra442"]
 [ext_resource type="Script" uid="uid://o5o1qmrlo1s3" path="res://scenes/levels/road_shape.gd" id="5_l37oo"]
-[ext_resource type="Texture2D" uid="uid://eyy7oruwxn3c" path="res://assets/images/close-up-bright-glitter.jpg" id="5_qpwj6"]
-[ext_resource type="Environment" uid="uid://b4vvsymm23i35" path="res://resources/level_1_environment.tres" id="7_r88tb"]
+[ext_resource type="Texture2D" uid="uid://eyy7oruwxn3c" path="res://assets/textures/close-up-bright-glitter.jpg" id="5_qpwj6"]
+[ext_resource type="Environment" uid="uid://b4vvsymm23i35" path="res://resources/skyboxes/level_1_environment.tres" id="7_r88tb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ndlae"]
 size = Vector3(5000, 20, 5000)

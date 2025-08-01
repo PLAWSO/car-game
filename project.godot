@@ -23,8 +23,8 @@ buses/default_bus_layout=""
 [autoload]
 
 Global="*res://scenes/managers/global.gd"
-SoundManager="*res://scenes/managers/sound_manager.tscn"
-LevelManager="*res://scenes/managers/level_manager.gd"
+SoundManager="*res://scenes/managers/sound_manager/sound_manager.tscn"
+LevelManager="*res://scenes/managers/level_manager/level_manager.gd"
 
 [debug_draw_3d]
 
