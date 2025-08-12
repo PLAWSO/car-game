@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://dv7uos683cwty"]
+[gd_scene load_steps=19 format=4 uid="uid://dv7uos683cwty"]
 
 [ext_resource type="Script" uid="uid://bojgw5ril2ea4" path="res://scenes/player/vehicle/vehicle.gd" id="1_tfdpf"]
 [ext_resource type="Texture2D" uid="uid://dg4k33db8mnwp" path="res://assets/models/generally/generally_albedo.png" id="2_ylt6k"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://db4ab04chsk8e" path="res://scenes/player/raycast_wheel.gd" id="3_ylt6k"]
 [ext_resource type="Script" uid="uid://br3eqy0fiws2n" path="res://scenes/player/cameras/chase_cam.gd" id="5_tfdpf"]
 [ext_resource type="Script" uid="uid://by2kix65oufyr" path="res://scenes/player/cameras/angle_cam.gd" id="6_ylt6k"]
+[ext_resource type="PackedScene" uid="uid://dnh13u58my6ct" path="res://scenes/effects/stylized_smoke.tscn" id="7_5kygh"]
 
 [sub_resource type="Curve" id="Curve_xor5f"]
 _limits = [0.0, 1.0, 0.0, 12000.0]
@@ -117,7 +118,6 @@ ray_cast_wheels = [NodePath("Wheels/WheelDF"), NodePath("Wheels/WheelPF"), NodeP
 max_horsepower = 300
 power_curve = SubResource("Curve_xor5f")
 gears = Array[float]([0.0, 2.0, 1.2, 1.0])
-show_debug = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14446, 0.286055)
@@ -204,7 +204,6 @@ over_extend = 0.1
 tire_turn_speed = 2.0
 turn_radius_curve = SubResource("Curve_ylt6k")
 is_steer = true
-show_debug = true
 
 [node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelDF"]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
@@ -234,7 +233,6 @@ over_extend = 0.1
 tire_turn_speed = 2.0
 turn_radius_curve = SubResource("Curve_ylt6k")
 is_steer = true
-show_debug = true
 
 [node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelPF"]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
@@ -262,7 +260,6 @@ over_extend = 0.1
 tire_max_turn_degrees = 35
 turn_radius_curve = SubResource("Curve_ylt6k")
 is_motor = true
-show_debug = true
 
 [node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelPR"]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
@@ -279,6 +276,9 @@ enabled = false
 target_position = Vector3(0, 2, 0)
 collision_mask = 2
 
+[node name="SmokeParticle" parent="Wheels/WheelPR" instance=ExtResource("7_5kygh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+
 [node name="WheelDR" type="Node3D" parent="Wheels" node_paths=PackedStringArray("vehicle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.749, -0.319, 1.223)
 script = ExtResource("3_ylt6k")
@@ -290,7 +290,6 @@ over_extend = 0.1
 tire_max_turn_degrees = 35
 turn_radius_curve = SubResource("Curve_ylt6k")
 is_motor = true
-show_debug = true
 
 [node name="Mesh" type="MeshInstance3D" parent="Wheels/WheelDR"]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
@@ -306,5 +305,8 @@ mesh = SubResource("BoxMesh_q8nvf")
 enabled = false
 target_position = Vector3(0, 2, 0)
 collision_mask = 2
+
+[node name="SmokeParticle" parent="Wheels/WheelDR" instance=ExtResource("7_5kygh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
 
 [connection signal="timeout" from="Wheels/WheelDF/Timer" to="Wheels/WheelDF" method="_on_timer_timeout"]

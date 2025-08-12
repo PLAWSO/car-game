@@ -32,7 +32,10 @@ settings/addon_root_folder="res://addons/debug_draw_3d"
 
 [display]
 
-window/stretch/scale_mode="integer"
+window/size/viewport_width=680
+window/size/viewport_height=360
+window/size/mode=4
+window/stretch/mode="viewport"
 
 [input]
 

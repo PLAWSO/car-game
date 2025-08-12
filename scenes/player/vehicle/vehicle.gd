@@ -31,6 +31,7 @@ class_name Vehicle
 
 #region Lifetime Variables (set on _ready)
 var total_wheels: int
+var num_driven_wheels: int
 #endregion
 
 #region User Input Variables (directly connected to user input)
@@ -40,7 +41,6 @@ var hand_brake := false
 var current_gear := 0
 var throttle := 0.0
 var throttle_rpm := 1000.0
-var frames_hooked_up := 0
 #endregion
 
 #region Physics Variables (updated near the start of every physics frame)
@@ -49,6 +49,10 @@ var current_rpm := 1000.0
 var wheel_torque := 0.0
 var drag_force: Vector3
 var total_gear_ratio: float
+var frames_hooked_up := 0
+var wheels_hooked_up := true
+var average_wheel_rpm := 1000.0
+
 #endregion
 
 func _ready():
@@ -61,6 +65,10 @@ func _ready():
 	self.total_wheels = ray_cast_wheels.size()
 	
 	#reset()
+	
+	for wheel in ray_cast_wheels:
+		if wheel.is_motor:
+			num_driven_wheels += 1
 	
 	Engine.time_scale = 1
 
@@ -96,7 +104,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("reset_high"):
 		reset(Vector3(0, 20, 0))
 
-
 #endregion
 
 #region Physics Process
@@ -115,6 +122,8 @@ func _physics_process(delta: float) -> void:
 		draw_debug()
 	
 	do_wheels_physics(self)
+	
+	check_wheels()
 	
 	set_engine_rpm()
 	
@@ -157,33 +166,41 @@ func set_wheel_torque():
 	self.wheel_torque = engine_torque * self.total_gear_ratio
 #endregion
 
-#region Set Engine RPM
-func set_engine_rpm():
+#region Check Wheels After Doing Physics
+func check_wheels():
 	var total_rpm = 0.0
 	var no_drive_wheels_slipping = true
 	var some_drive_wheels_colliding = false
-	var drive_wheels := 0
 	for wheel in ray_cast_wheels:
 		if wheel.is_motor:
 			total_rpm = (wheel.wheel_velocity.length() / (wheel.wheel_radius * PI * 2) * total_gear_ratio * 60)
-			drive_wheels += 1
+
 			if wheel.is_slipping:
 				no_drive_wheels_slipping = false
 			if wheel.ray.is_colliding():
 				some_drive_wheels_colliding = true
 	
-	if !no_drive_wheels_slipping:
-		frames_hooked_up = 0
-	else:
-		frames_hooked_up += 1
+	self.wheels_hooked_up = no_drive_wheels_slipping and some_drive_wheels_colliding and current_gear != 0
 	
-	if no_drive_wheels_slipping and some_drive_wheels_colliding and current_gear != 0 and frames_hooked_up > frames_to_hook_up:
-		print("CONNECTED")
-		self.current_rpm = clamp(total_rpm / drive_wheels, 1000, max_rpm)
+	self.average_wheel_rpm = total_rpm / num_driven_wheels
+	
+	if !wheels_hooked_up:
+		self.frames_hooked_up = 0
 	else:
-		print("SOLO")
-		self.current_rpm = throttle_rpm
-		#self.current_rpm = move_toward(self.current_rpm, throttle_rpm, 1000 * physics_delta)
+		self.frames_hooked_up += 1
+
+#endregion
+
+#region Set Engine RPM
+func set_engine_rpm():
+	var target_rpm = get_target_rpm();
+	self.current_rpm = move_toward(self.current_rpm, clamp(target_rpm, 1000, max_rpm), 25000 * physics_delta)
+
+func get_target_rpm() -> float:
+	if wheels_hooked_up and frames_hooked_up > frames_to_hook_up:
+		return self.average_wheel_rpm
+	return self.throttle_rpm
+
 #endregion
 
 #region Apply Drag
@@ -224,7 +241,6 @@ func draw_debug():
 #region Reset Car
 func _on_fall_zone_body_entered(body: Node3D) -> void:
 		reset(Vector3(0, 10, 0))
-
 
 func reset(start_pos: Vector3):
 	global_position = start_pos

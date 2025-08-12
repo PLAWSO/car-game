@@ -32,6 +32,7 @@ class_name RayCastWheel
 @onready var mesh: Node3D = self.get_node("Mesh") # should be mesh instance, no?
 @onready var ray: RayCast3D = self.get_node("FloorRay")
 @onready var force_pos_timer: Timer = self.get_node("Timer")
+@onready var smoke_particle: GPUParticles3D = self.get_node("SmokeParticle")
 #endregion
 
 #region Physics Variables (updated near the start of every physics frame)
@@ -58,6 +59,8 @@ var braking_force: Vector3
 
 func _ready() -> void:
 	await get_tree().process_frame
+	if is_motor:
+		smoke_particle.emitting = false
 	self.vehicle_mass = vehicle.mass
 	ray.target_position.y = -(rest_dist + wheel_radius + over_extend)
 	self.resting_weight_on_wheel = ((vehicle_mass * -self.vehicle.get_gravity().y) / vehicle.total_wheels)
@@ -73,6 +76,8 @@ func do_wheel_process(body: Vehicle, delta: float):
 		self.mesh.position.y = -self.spring_length
 		do_wheel_physics()
 	else:
+		if is_motor:
+			smoke_particle.emitting = false
 		do_return_to_rest()
 	
 	do_wheel_spin()
@@ -122,13 +127,19 @@ func do_wheel_physics():
 		self.acceleration_force = calc_acceleration_force()
 		var losses = self.rolling_resistance_force.length() + vehicle.drag_force.length()
 		var max_tolerable_acceleration = 10000 # NEEDS MORE ROBUST SOLUTION
-		if (self.acceleration_force.length() - losses) > max_tolerable_acceleration:
-			#self.acceleration_force *= 0.2
-			self.acceleration_force.limit_length(max_tolerable_acceleration)
+		var currently_slipping: bool = (self.acceleration_force.length() - losses) > max_tolerable_acceleration
+		var in_grip_cooldown := vehicle.frames_hooked_up <= vehicle.frames_to_hook_up
+		
+		self.is_slipping = false
+		if currently_slipping:
 			self.is_slipping = true
+		
+		if currently_slipping or in_grip_cooldown:
+			self.acceleration_force.limit_length(max_tolerable_acceleration)
+			smoke_particle.emitting = true
 			vehicle.apply_force(self.acceleration_force, self.vehicle_wheel_center_offset)
 		else:
-			self.is_slipping = false
+			smoke_particle.emitting = false
 			vehicle.apply_force(self.acceleration_force, self.vehicle_wheel_center_offset)
 	
 	self.spring_force = calc_spring_force()
