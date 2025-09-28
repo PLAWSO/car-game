@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="3D Platformer Game"
-run/main_scene="uid://c1xrcmt5kfank"
+run/main_scene="uid://crwyg2qibovj8"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/default_gravity=9.8
 config/size/viewport_height=648
