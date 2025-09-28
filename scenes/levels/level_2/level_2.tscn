@@ -46,13 +46,13 @@ point_count = 8
 [sub_resource type="BoxShape3D" id="BoxShape3D_ra442"]
 size = Vector3(5000, 5, 5000)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l37oo"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hopjm"]
 albedo_texture = ExtResource("5_qpwj6")
 uv1_scale = Vector3(-46.04, -46.04, -46.04)
 uv1_offset = Vector3(0.335, 0, 0)
 
 [sub_resource type="BoxMesh" id="BoxMesh_l37oo"]
-material = SubResource("StandardMaterial3D_l37oo")
+material = SubResource("StandardMaterial3D_hopjm")
 uv2_padding = 11.45
 size = Vector3(5000, 5, 5000)
 
@@ -62,7 +62,7 @@ script = ExtResource("1_fiq81")
 [node name="Player" type="Node3D" parent="."]
 
 [node name="Car2" parent="Player" instance=ExtResource("1_ra442")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.98525, 16.4519, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.98525, 2.8756, 0)
 
 [node name="Enemies" type="Node3D" parent="."]
 

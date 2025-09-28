@@ -223,16 +223,16 @@ func do_basic_sound():
 #region Draw Debug
 func draw_debug():
 	#Draw.box(self.global_position + Vector3(0, 0.116, 0), self.quaternion, Vector3(1.885, 1.085, 3.9), Color.AQUA)
-	DebugDraw2D.begin_text_group("-- Vehicle --", 2, Color.LIME_GREEN, true, text_groups_title_font_size, text_groups_text_font_size)
-	DebugDraw2D.set_text("Velocity: ", linear_velocity.length())
-	DebugDraw2D.set_text("Current Gear: ", current_gear)
-	DebugDraw2D.set_text("Throttle: ", throttle)
-	DebugDraw2D.set_text("Current RPM: ", current_rpm)
+	#DebugDraw2D.begin_text_group("-- Vehicle --", 2, Color.LIME_GREEN, true, text_groups_title_font_size, text_groups_text_font_size)
+	#DebugDraw2D.set_text("Velocity: ", linear_velocity.length())
+	#DebugDraw2D.set_text("Current Gear: ", current_gear)
+	#DebugDraw2D.set_text("Throttle: ", throttle)
+	#DebugDraw2D.set_text("Current RPM: ", current_rpm)
 
-	#for i in ray_cast_wheels.size():
-		#var color := Color.RED if ray_cast_wheels[i].is_slipping else Color.GREEN
-		#Draw.gui_box(str(i), color)
-	DebugDraw2D.end_text_group()
+	for i in ray_cast_wheels.size():
+		var color := Color.RED if ray_cast_wheels[i].is_slipping else Color.GREEN
+		Draw.gui_box(str(i), color)
+	#DebugDraw2D.end_text_group()
 	
 	#Draw.text_at_position(self.global_position, str(self.global_position))
 	#Draw.vector(self.global_position, self.linear_velocity * 10, Color.CORNSILK)

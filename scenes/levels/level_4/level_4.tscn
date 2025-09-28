@@ -1,0 +1,81 @@
+[gd_scene load_steps=12 format=3 uid="uid://6f8ptir2hajc"]
+
+[ext_resource type="Script" uid="uid://dhd7m52xv35wm" path="res://scenes/levels/level_4/rigid_body_3d.gd" id="2_4f3hn"]
+[ext_resource type="Environment" uid="uid://b4vvsymm23i35" path="res://resources/skyboxes/level_1_environment.tres" id="3_bvs1t"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3uy1m"]
+friction = 0.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4f3hn"]
+size = Vector3(5000, 5, 5000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l37oo"]
+transparency = 1
+albedo_color = Color(1, 0.1, 0.1, 0.113725)
+uv1_scale = Vector3(-46.04, -46.04, -46.04)
+uv1_offset = Vector3(0.335, 0, 0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bvs1t"]
+material = SubResource("StandardMaterial3D_l37oo")
+uv2_padding = 11.45
+size = Vector3(5000, 5, 5000)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4f3hn"]
+friction = 0.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l583c"]
+size = Vector3(1.5, 1, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_o2n0b"]
+size = Vector3(1.5, 1, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vp5ds"]
+albedo_color = Color(9.62615e-08, 0.56935, 0.844873, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_n84ud"]
+material = SubResource("StandardMaterial3D_vp5ds")
+radius = 0.26
+height = 1.08
+
+[node name="Level4" type="Node3D"]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.645224, 0)
+collision_layer = 2
+physics_material_override = SubResource("PhysicsMaterial_3uy1m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_4f3hn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("BoxMesh_bvs1t")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.995, 0)
+collision_mask = 2
+physics_material_override = SubResource("PhysicsMaterial_4f3hn")
+script = ExtResource("2_4f3hn")
+angular_velocity_deg = 90.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("BoxShape3D_l583c")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
+mesh = SubResource("BoxMesh_o2n0b")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="RigidBody3D"]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0.541054, -0.750078)
+mesh = SubResource("CapsuleMesh_n84ud")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 19.3703, 6.5561)
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(0.544007, -0.536549, 0.645113, 0.251703, 0.837777, 0.484536, -0.800438, -0.101214, 0.590808, 10.0804, 25.4312, 20.8462)
+light_energy = 1.595
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = ExtResource("3_bvs1t")

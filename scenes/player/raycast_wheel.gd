@@ -126,9 +126,13 @@ func do_wheel_physics():
 	if apply_acceleration:
 		self.acceleration_force = calc_acceleration_force()
 		var losses = self.rolling_resistance_force.length() + vehicle.drag_force.length()
-		var max_tolerable_acceleration = 10000 # NEEDS MORE ROBUST SOLUTION
+		var max_tolerable_acceleration = 5000 # COULD USE MORE ROBUST SOLUTION
 		var currently_slipping: bool = (self.acceleration_force.length() - losses) > max_tolerable_acceleration
 		var in_grip_cooldown := vehicle.frames_hooked_up <= vehicle.frames_to_hook_up
+		DebugDraw2D.set_text("losses: ", losses)
+		DebugDraw2D.set_text("power: ", self.acceleration_force.length())
+		DebugDraw2D.set_text("net: ", self.acceleration_force.length() - losses)
+		DebugDraw2D.set_text("slipping? ", (self.acceleration_force.length() - losses) > max_tolerable_acceleration)
 		
 		self.is_slipping = false
 		if currently_slipping:
@@ -158,11 +162,18 @@ func do_wheel_physics():
 		vehicle.apply_force(self.braking_force, self.vehicle_wheel_center_offset)
 	
 	if self.show_debug:
-		if apply_acceleration: Draw.vector(self.global_position, self.acceleration_force / vehicle_mass, Color.GREEN)
-		if apply_spring: Draw.vector(self.global_position, spring_force / vehicle_mass, Color.BLUE)
-		if apply_steering: Draw.vector(self.global_position, steering_force / vehicle_mass, Color.RED)
-		if apply_rolling_resistance: Draw.vector(self.global_position, rolling_resistance_force / vehicle_mass, Color.BLACK)
-		if apply_braking: Draw.vector(self.global_position, braking_force / vehicle_mass, Color.DEEP_PINK)
+		pass
+		#DebugDraw2D.set_text("losses: ", (self.rolling_resistance_force + (vehicle.drag_force / 4)).length())
+		#DebugDraw2D.set_text("power: ", (self.acceleration_force).length())
+		#DebugDraw2D.set_text("net: ", (self.acceleration_force).length() - (self.rolling_resistance_force + (vehicle.drag_force / 4)).length())
+
+		#if apply_acceleration: Draw.vector(self.global_position, self.acceleration_force / vehicle_mass, Color.GREEN)
+		#if apply_spring: Draw.vector(self.global_position, spring_force / vehicle_mass, Color.BLUE)
+		#if apply_steering: Draw.vector(self.global_position, steering_force / vehicle_mass, Color.RED)
+		#if apply_rolling_resistance: Draw.vector(self.global_position, rolling_resistance_force / vehicle_mass, Color.BLACK)
+		#if apply_braking: Draw.vector(self.global_position, braking_force / vehicle_mass, Color.DEEP_PINK)
+		
+		
 #endregion
 
 #region Calculate Instant Forces
@@ -179,7 +190,7 @@ func calc_steering_traction_factor() -> float:
 
 func calc_acceleration_force() -> Vector3:
 	var ray_forward = -self.ray.global_basis.z
-	DebugDraw2D.set_text("motor_input", vehicle.motor_input)
+	#DebugDraw2D.set_text("motor_input", vehicle.motor_input)
 	return ray_forward * vehicle.motor_input * vehicle.wheel_torque / wheel_radius
 
 func calc_spring_force() -> Vector3:
